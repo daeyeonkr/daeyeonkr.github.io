@@ -103,15 +103,12 @@ content:
         title: POSTECH
         sub_title: M.S. in Computer Science
         caption: 2024.02 - Present
-        quote: >
-          Computer Graphics, Computer Vision, Machine Learning
-        description: | # this will include new lines to allow paragraphs
-          Description of qualification
+
       - layout: top-left
         title: POSTECH
         sub_title: B.S. in Computer Science
         caption: 2020.02 - 2024.02
-        
+
 # Footer
 footer_show_references: true
 # references_title: References on request (Override references text)
