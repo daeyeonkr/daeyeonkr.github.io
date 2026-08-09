@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+body{margin:0;background:#ffffff;}
+@keyframes reonIn { from { transform: translate(-40px, 0) scale(0.92); opacity: 0; } to { transform: translate(0,0) scale(1); opacity: 1; } }
+@keyframes reonPulse { 0% { box-shadow: 0 0 0 0 rgba(74,127,196,0.45); } 100% { box-shadow: 0 0 0 16px rgba(74,127,196,0); } }
+@keyframes sceneFade { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes filmScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes filmScrollY { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+@keyframes lensIn { from { opacity: 0; transform: translate(-50%,-50%) scale(0.75); } to { opacity: 1; transform: translate(-50%,-50%) scale(1); } }
+a{color:#4a7fc4;}
+a:hover{color:#38598b;}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#ffffff;font-family:'Inter',sans-serif;color:#141413;display:flex;justify-content:center;">
+<div style="width:100%;max-width:880px;padding:72px 32px 80px;">
+
+  <div style="text-align:center;">
+    <h1 style="font-family:'Newsreader',serif;font-size:44px;font-weight:400;line-height:1.15;letter-spacing:-0.8px;margin:0 auto 24px;max-width:760px;text-wrap:balance;">REON-NVS: Real-Time Online Novel-View Synthesis from Sparse-View Videos</h1>
+    <div style="font-size:16px;line-height:1.6;color:#141413;margin-bottom:6px;">
+      <a href="https://daeyeonkr.github.io/" target="_blank" style="text-decoration:none;">Daeyeon Kim</a>, <a href="#" style="text-decoration:none;">Jinhyeok Kim</a>, <a href="#" style="text-decoration:none;">Gangmin Kwon</a>, <a href="#" style="text-decoration:none;">Seungjoo Shin</a>, <a href="#" style="text-decoration:none;">Sunghyun Cho</a>
+    </div>
+    <div style="font-size:14px;color:#5b6573;margin-bottom:28px;">POSTECH</div>
+    <div style="font-family:'Newsreader',serif;font-size:22px;font-style:italic;color:#141413;margin-bottom:16px;">ECCV 2026</div>
+    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
+      <a href="#" style="display:inline-flex;align-items:center;justify-content:center;min-width:132px;box-sizing:border-box;white-space:nowrap;gap:7px;background:#141413;color:#faf9f5;text-decoration:none;font-size:13.5px;font-weight:500;border-radius:999px;padding:9px 20px;" style-hover="background:#38598b;color:#faf9f5;"><span style="font-size:15px;line-height:1;">📄</span>Paper</a>
+      <a href="#" style="display:inline-flex;align-items:center;justify-content:center;min-width:132px;box-sizing:border-box;white-space:nowrap;gap:7px;background:#141413;color:#faf9f5;text-decoration:none;font-size:13.5px;font-weight:500;border-radius:999px;padding:9px 20px;" style-hover="background:#38598b;color:#faf9f5;"><span style="font-size:15px;line-height:1;">💻</span>Code</a>
+      <a href="#" style="display:inline-flex;align-items:center;justify-content:center;min-width:132px;box-sizing:border-box;white-space:nowrap;gap:7px;background:#141413;color:#faf9f5;text-decoration:none;font-size:13.5px;font-weight:500;border-radius:999px;padding:9px 20px;" style-hover="background:#38598b;color:#faf9f5;"><span style="font-size:15px;line-height:1;">📦</span>Dataset</a>
+    </div>
+  </div>
+
+  <div style="margin-top:120px;">
+    <h2 style="font-family:'Newsreader',serif;font-size:30px;font-weight:400;letter-spacing:-0.3px;margin:0 0 20px;text-align:center;">Abstract</h2>
+    <div style="background:#ffffff;border:1px solid #e8e5dd;border-radius:14px;padding:28px 30px;">
+      {{ filmAnim }}
+      <p style="font-size:14.5px;line-height:1.75;color:#3d4552;margin:24px 0 0;text-wrap:pretty;">Recent advances in online reconstruction of dynamic scenes demonstrate impressive visual quality, showing potential for real-world applications such as VR content streaming. Yet, existing online reconstruction methods still require a large number of input views and time-consuming iterative optimization. Moreover, reliable pose estimation, a prerequisite for NVS, introduces additional delay. In this paper, we present REON-NVS, a feedforward online NVS framework for sparse-view input video streams, which goes from pose estimation to novel-view reconstruction in real time. REON-NVS comprises two main components. First, our method leverages a feedforward pose estimator and mapper that replace conventional camera pose optimization pipelines. Second, we design a scene reconstructor built upon a state-space model (SSM), which efficiently synthesizes temporally consistent novel-view images by exploiting information from previous frames. To train and evaluate our approach in realistic in-the-wild streaming scenarios, we introduce a new multi-view dynamic scene dataset of 150 dynamic scenes captured with moving cameras. Extensive experiments demonstrate that REON-NVS achieves high visual quality while operating in real time (32 FPS), validating its applicability in real-world scenarios.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:120px;">
+    <h2 style="font-family:'Newsreader',serif;font-size:30px;font-weight:400;letter-spacing:-0.3px;margin:0 0 20px;text-align:center;">Method</h2>
+    <div style="background:#ffffff;border:1px solid #e8e5dd;border-radius:14px;padding:28px 30px;">
+      <img src="assets/method-figure.png" alt="REON-NVS framework" style="width:100%;display:block;border-radius:10px;" />
+      <p style="font-size:14.5px;line-height:1.75;color:#3d4552;margin:24px 0 0;text-wrap:pretty;">REON-NVS combines a feedforward <strong style="font-weight:600;color:#141413;">pose estimator and mapper</strong> with an SSM-based <strong style="font-weight:600;color:#141413;">scene reconstructor</strong> to synthesize temporally consistent novel views in real time.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:120px;">
+    <h2 style="font-family:'Newsreader',serif;font-size:30px;font-weight:400;letter-spacing:-0.3px;margin:0 0 20px;text-align:center;">Results</h2>
+    <div style="background:#ffffff;border:1px solid #e8e5dd;border-radius:14px;padding:28px 30px 26px;">
+      <div key="{{ sceneKey }}" style="display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap;animation:sceneFade 0.45s ease-out;">
+        <div style="display:flex;flex-direction:column;gap:10px;width:150px;">
+          <div>
+            <video key="{{ sceneIn1 }}" src="{{ sceneIn1 }}" autoPlay="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="width:100%;display:block;border-radius:10px;filter:brightness(1.15);"></video>
+            <div style="font-size:12px;color:#8a93a3;text-align:center;margin-top:6px;">Input · Cam 1</div>
+          </div>
+          <div>
+            <video key="{{ sceneIn2 }}" src="{{ sceneIn2 }}" autoPlay="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="width:100%;display:block;border-radius:10px;filter:brightness(1.15);"></video>
+            <div style="font-size:12px;color:#8a93a3;text-align:center;margin-top:6px;">Input · Cam 2</div>
+          </div>
+        </div>
+        <div style="width:320px;">
+          <video key="{{ sceneOut }}" src="{{ sceneOut }}" autoPlay="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="width:100%;display:block;border-radius:10px;filter:brightness(1.15);"></video>
+          <div style="font-size:12px;color:#8a93a3;text-align:center;margin-top:6px;">Novel View Video</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:14px;margin-top:18px;">
+        <button onClick="{{ prevScene }}" style="border:1px solid #e8e5dd;background:#ffffff;border-radius:999px;width:32px;height:32px;font-size:14px;color:#3d4552;cursor:pointer;" style-hover="background:#f3f1ea;">&#8592;</button>
+        <sc-for list="{{ sceneDots }}" as="d" hint-placeholder-count="2">
+          <button onClick="{{ d.go }}" style="border:none;background:{{ d.color }};border-radius:999px;width:9px;height:9px;padding:0;cursor:pointer;"></button>
+        </sc-for>
+        <button onClick="{{ nextScene }}" style="border:1px solid #e8e5dd;background:#ffffff;border-radius:999px;width:32px;height:32px;font-size:14px;color:#3d4552;cursor:pointer;" style-hover="background:#f3f1ea;">&#8594;</button>
+      </div>
+    </div>
+  </div>
+
+
+  <sc-if value="{{ showBibtex }}" hint-placeholder-val="{{ true }}">
+  <div style="margin-top:120px;">
+    <h2 style="font-family:'Newsreader',serif;font-size:30px;font-weight:400;letter-spacing:-0.3px;margin:0 0 16px;text-align:center;">BibTeX</h2>
+    <div style="position:relative;">
+    <button onClick="{{ copyBib }}" style="position:absolute;top:14px;right:14px;display:inline-flex;align-items:center;gap:6px;background:#2e2e2c;color:#e8e5dd;border:1px solid #4a4a47;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;" style-hover="background:#3d3d3a;" title="Copy BibTeX">{{ copyLabel }}</button>
+    <pre style="background:#141413;color:#e8e5dd;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.7;border-radius:14px;padding:24px 28px;overflow-x:auto;margin:0;">@article{kim2026reonnvs,
+  title   = {REON-NVS: Real-Time Online Novel-View Synthesis from Sparse-View Videos},
+  author  = {Kim, Daeyeon and Kim, Jinhyeok and Kwon, Gangmin and Shin, Seungjoo and Cho, Sunghyun},
+  year    = {2026}
+}</pre>
+    </div>
+  </div>
+  </sc-if>
+
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showBibtex&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;}}">
+class Component extends DCLogic {
+  state = { step: 3, scene: 0 };
+  scenes = [
+    { in1: 'assets/left_fs.mp4', in2: 'assets/right_fs.mp4', out: 'assets/render_fs.mp4' },
+    { in1: 'assets/fountain_in1.mp4', in2: 'assets/fountain_in2.mp4', out: 'assets/fountain_out.mp4' },
+    { in1: 'assets/cug_in1.mp4', in2: 'assets/cug_in2.mp4', out: 'assets/cug_out.mp4' },
+    { in1: 'assets/car_in1.mp4', in2: 'assets/car_in2.mp4', out: 'assets/car_out.mp4' },
+    { in1: 'assets/play_in1.mp4', in2: 'assets/play_in2.mp4', out: 'assets/play_out.mp4' },
+    { in1: 'assets/out1_in1.mp4', in2: 'assets/out1_in2.mp4', out: 'assets/out1_out.mp4' },
+    { in1: 'assets/stair_in1.mp4', in2: 'assets/stair_in2.mp4', out: 'assets/stair_out.mp4' },
+  ];
+  componentDidMount() {
+    this._timer = setInterval(() => this.setState(s => ({ step: s.step + 1, filmSnap: false }), () => {
+      // after the wrap step's scroll finishes, silently jump back to the identical middle-copy position
+      if (this.state.step % 8 === 0) setTimeout(() => this.setState({ filmSnap: true }), 850);
+    }), 2000);
+    this.syncVideos(); setTimeout(() => this.syncVideos(), 1000);
+    // loop supervisor: when any clip ends, restart all three together in sync
+    this._loopTimer = setInterval(() => {
+      const vids = Array.from(document.querySelectorAll('video'));
+      if (!vids.length) return;
+      if (vids.some(v => v.ended)) {
+        vids.forEach(v => { try { v.currentTime = 0; } catch (e) {} v.play().catch(() => {}); });
+      }
+    }, 120);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.scene !== this.state.scene) this.syncVideos();
+  }
+  syncVideos() {
+    const vids = Array.from(document.querySelectorAll('video'));
+    const startAll = () => {
+      if (!vids.every(v => v.readyState >= 3)) return false;
+      vids.forEach(v => {
+        v.muted = true; v.loop = false; v.playsInline = true;
+        try { v.currentTime = 0; } catch (e) {}
+        v.play().catch(() => {});
+      });
+      return true;
+    };
+    if (startAll()) return;
+    let done = false;
+    const attempt = () => { if (!done && startAll()) done = true; };
+    vids.forEach(v => {
+      if (v.readyState < 3) v.addEventListener('canplaythrough', attempt, { once: true });
+    });
+    // safety net: force-start whatever is ready after 2s
+    setTimeout(() => {
+      if (done) return; done = true;
+      vids.forEach(v => {
+        v.muted = true;
+        try { v.currentTime = 0; } catch (e) {}
+        v.play().catch(() => {});
+      });
+    }, 2000);
+  }
+  componentWillUnmount() { clearInterval(this._timer); clearInterval(this._flip); clearInterval(this._loopTimer); }
+  buildFilm() {
+    const h = React.createElement;
+    const holes = pos => h('div', {style:{
+      position:'absolute', top:0, bottom:0, [pos]:3, width:6,
+      background:'repeating-linear-gradient(180deg, transparent 0 5px, #4a4a47 5px 11px, transparent 11px 16px)',
+      borderRadius:2}});
+    const step = this.state.step;
+    const strip = (pre) => {
+      const raw = step % 8;
+      // at wrap, first scroll on into the third copy (offset 16), then snap back to the identical offset 8
+      const offset = (raw === 0 && !this.state.filmSnap) ? 16 : raw + 8;
+      const noTrans = raw === 0 && this.state.filmSnap;
+      const frames = [];
+      const total = 24;
+      for (let k = 0; k < total; k++) {
+        const i = (k % 8) + 1;
+        const isCenter = k === offset;
+        frames.push(h('img', {key: k, src:`assets/frames/${pre}_${i}.png`, style:{
+          width:64, height:64, boxSizing:'border-box', objectFit:'cover', borderRadius:3, flexShrink:0,
+          filter:'brightness(1.1)', position:'relative', zIndex: isCenter ? 2 : 1,
+          transform: isCenter ? 'scale(1.3)' : 'scale(1)',
+          border: isCenter ? '1.5px solid #7db2f0' : '1.5px solid transparent',
+          boxShadow: isCenter ? '0 0 18px rgba(74,127,196,0.9)' : 'none',
+          transition: noTrans ? 'none' : 'transform 0.7s cubic-bezier(.2,.7,.2,1), border-color 0.7s, box-shadow 0.7s'}}));
+      }
+      return h('div', {style:{background:'#141413', borderRadius:8, padding:'6px 14px', position:'relative', height:200}},
+        holes('left'), holes('right'),
+        h('div', {style:{height:'100%', position:'relative', display:'flex', justifyContent:'center', clipPath:'inset(0 -14px)'}},
+          h('div', {style:{display:'flex', flexDirection:'column', gap:6, height:'max-content',
+            transform:`translateY(${-(offset*70) + 66}px)`,
+            transition: noTrans ? 'none' : 'transform 0.7s cubic-bezier(.2,.7,.2,1)'}}, frames)));
+    };
+    const capStyle = {fontSize:11, color:'#8a93a3', textAlign:'center', marginTop:6};
+    const arrow = h('div', {style:{fontSize:32, color:'#c9c4b8', flexShrink:0, marginBottom:23}}, '\u2192');
+    return h('div', {style:{display:'flex', alignItems:'center', justifyContent:'center', gap:18, flexWrap:'wrap'}},
+      h('div', {style:{display:'flex', gap:14}},
+        h('div', null, strip('vc1'), h('div', {style:capStyle}, 'Cam 1')),
+        h('div', null, strip('vc2'), h('div', {style:capStyle}, 'Cam 2'))),
+      arrow,
+      h('div', {key:'fpulse'+step, style:{background:'#4a7fc4', color:'#ffffff', fontWeight:600, fontSize:15, letterSpacing:'0.3px', borderRadius:12, padding:'18px 22px', flexShrink:0, marginBottom:23, animation:'reonPulse 0.9s ease-out'}}, 'REON-NVS'),
+      arrow,
+      h('div', null,
+        strip('vout'),
+        h('div', {style:capStyle}, 'Novel view')));
+  }
+  buildAnim() {
+    const h = React.createElement, s = this.state.step;
+    const fr = i => (i % 8) + 1;
+    const cardBase = (d, extra) => ({
+      position: 'absolute', inset: 0, background: '#ffffff', border: '1px solid #e0ddd4',
+      borderRadius: 12, padding: 10, boxShadow: '0 6px 18px rgba(20,20,19,0.08)',
+      transform: `translate(${-d*16}px, ${-d*13}px) scale(${1 - d*0.07})`,
+      opacity: d >= 3 ? 0 : 1 - d*0.28, zIndex: 20 - d,
+      transition: 'transform 0.7s cubic-bezier(.2,.7,.2,1), opacity 0.7s', ...extra,
+    });
+    const label = t => h('div', {style:{fontSize:11, fontWeight:600, color:'#4a7fc4', marginBottom:6, fontFamily:"'JetBrains Mono',monospace"}}, `t = ${(t - 1) % 8 + 1}`);
+    const inputCards = [], outputCards = [];
+    for (let i = Math.max(0, s-3); i <= s; i++) {
+      const d = s - i, anim = d === 0 ? { animation: 'reonIn 0.65s cubic-bezier(.2,.7,.2,1)' } : {};
+      inputCards.push(h('div', {key: 'in'+i, style: cardBase(d, anim)},
+        label(i+1),
+        h('div', {style:{display:'flex', gap:6}},
+          h('div', {style:{flex:1, minWidth:0}},
+            h('img', {src:`assets/frames/vc1_${fr(i)}.png`, style:{width:'100%', aspectRatio:'1/1', objectFit:'cover', borderRadius:6, display:'block'}}),
+            h('div', {style:{fontSize:10.5, color:'#8a93a3', textAlign:'center', marginTop:4}}, 'Cam 1')),
+          h('div', {style:{flex:1, minWidth:0}},
+            h('img', {src:`assets/frames/vc2_${fr(i)}.png`, style:{width:'100%', aspectRatio:'1/1', objectFit:'cover', borderRadius:6, display:'block'}}),
+            h('div', {style:{fontSize:10.5, color:'#8a93a3', textAlign:'center', marginTop:4}}, 'Cam 2')))));
+      outputCards.push(h('div', {key: 'out'+i, style: cardBase(d, anim)},
+        label(i+1),
+        h('img', {src:`assets/frames/vout_${fr(i)}.png`, style:{width:'100%', aspectRatio:'1/1', objectFit:'cover', borderRadius:6, display:'block'}})));
+    }
+    const colHead = txt => h('div', {style:{fontSize:11.5, fontWeight:600, letterSpacing:'0.5px', textTransform:'uppercase', color:'#5b6573', textAlign:'center', marginTop:18}}, txt);
+    const arrow = h('div', {style:{fontSize:26, color:'#b6bdc9', lineHeight:1}}, '\u2192');
+    const col = (stackW, stackH, cards, caption) => h('div', {style:{display:'flex', flexDirection:'column', alignItems:'center'}},
+      h('div', {style:{position:'relative', width:stackW, height:stackH, marginLeft:20}}, cards),
+      h('div', {style:{width:stackW, marginLeft:20}}, colHead(caption)));
+    return h('div', {style:{display:'flex', alignItems:'center', justifyContent:'center', gap:26, flexWrap:'wrap'}},
+      col(332, 212, inputCards, 'Sparse-view input stream'),
+      h('div', {style:{display:'flex', alignItems:'center', gap:14, marginBottom:30}},
+        arrow,
+        h('div', {key:'pulse'+s, style:{background:'#4a7fc4', color:'#ffffff', fontWeight:600, fontSize:15, letterSpacing:'0.3px', borderRadius:12, padding:'18px 24px', animation:'reonPulse 0.9s ease-out'}}, 'REON-NVS'),
+        arrow),
+      col(170, 196, outputCards, 'Free-viewpoint video'));
+  }
+  renderVals() {
+    const sc = this.scenes[this.state.scene];
+    const n = this.scenes.length;
+    return {
+      filmAnim: this.buildFilm(),
+      sceneIn1: sc.in1, sceneIn2: sc.in2, sceneOut: sc.out, sceneKey: 'scene' + this.state.scene,
+      prevScene: () => this.setState(s => ({ scene: (s.scene - 1 + n) % n })),
+      nextScene: () => this.setState(s => ({ scene: (s.scene + 1) % n })),
+      sceneDots: this.scenes.map((_, i) => ({ color: i === this.state.scene ? '#38598b' : '#d8d4c9', go: () => this.setState({ scene: i }) })),
+      showBibtex: this.props.showBibtex ?? true,
+      copyLabel: this.state.copied ? '\u2705' : '\u{1F4CB}',
+      copyBib: () => {
+        const pre = document.querySelector('pre');
+        const text = pre ? pre.textContent : '';
+        const ok = () => {
+          this.setState({ copied: true });
+          setTimeout(() => this.setState({ copied: false }), 1600);
+        };
+        const fallback = () => {
+          const ta = document.createElement('textarea');
+          ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); ok(); } catch (e) {}
+          document.body.removeChild(ta);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(ok, fallback);
+        } else fallback();
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>
