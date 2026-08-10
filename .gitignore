@@ -1,5 +1,8 @@
 # 페이지 소스 export — 내용은 publication/ 아래에 이미 풀려 있음
 *.zip
 
+# 언번들 전 원본 — git 이력(cae8c1f)에 이미 남아 있어 커밋 불필요
+*.backup
+
 # macOS
 .DS_Store
