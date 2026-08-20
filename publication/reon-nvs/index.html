@@ -39,62 +39,99 @@ body{margin:0;background:#ffffff;}
 @keyframes lensIn { from { opacity: 0; transform: translate(-50%,-50%) scale(0.75); } to { opacity: 1; transform: translate(-50%,-50%) scale(1); } }
 a{color:#4a7fc4;}
 a:hover{color:#38598b;}
+
+/* ---- mobile ---- */
+@media (max-width:720px){
+  .page{box-sizing:border-box !important;padding:44px 16px 56px !important;}
+  .title{font-size:30px !important;letter-spacing:-0.4px !important;margin-bottom:18px !important;}
+  .section{margin-top:64px !important;}
+  .h2{font-size:24px !important;margin-bottom:14px !important;}
+  .card{padding:16px 14px !important;}
+
+  /* action buttons: keep all three on one row */
+  .btn-row{gap:8px !important;flex-wrap:nowrap !important;}
+  .btn{min-width:0 !important;flex:1 1 0 !important;padding:9px 8px !important;font-size:12.5px !important;gap:5px !important;}
+
+  /* results: keep inputs beside the novel view, scale by the 150:320 ratio */
+  .results-row{flex-wrap:nowrap !important;gap:10px !important;align-items:flex-start !important;}
+  .results-inputs{width:auto !important;flex:150 1 0 !important;min-width:0 !important;gap:8px !important;}
+  .results-output{width:auto !important;flex:320 1 0 !important;min-width:0 !important;}
+
+  .cap{font-size:10.5px !important;margin-top:4px !important;}
+
+  /* film pipeline: scale the whole row with zoom instead of overriding widths —
+     buildFilm() positions frames with a hard-coded 70px pitch (64px frame + 6px
+     gap), so resizing the frames in CSS would desync the strip animation.
+     flex-shrink:0 keeps the strips from being squeezed instead of scaled. */
+  .film-row{flex-wrap:nowrap !important;gap:10px !important;}
+  .film-row>*{flex-shrink:0 !important;}
+  .film-strips{gap:8px !important;}
+  .film-strips>*{flex-shrink:0 !important;}
+
+  .bibtex{padding:16px 14px !important;font-size:11px !important;}
+}
+/* natural film width is ~497px; keep it inside (viewport - 60px) of usable width */
+@media (max-width:560px){ .film-row{zoom:0.80;} }
+@media (max-width:480px){ .film-row{zoom:0.70;} }
+@media (max-width:430px){ .film-row{zoom:0.62;} .title{font-size:26px !important;} }
+@media (max-width:370px){ .film-row{zoom:0.55;} }
+@media (max-width:330px){ .film-row{zoom:0.48;} }
 </style>
 </helmet>
 
 <div style="min-height:100vh;background:#ffffff;font-family:'Inter',sans-serif;color:#141413;display:flex;justify-content:center;">
-<div style="width:100%;max-width:880px;padding:72px 32px 80px;">
+<div class="page" style="width:100%;max-width:880px;padding:72px 32px 80px;">
 
   <div style="text-align:center;">
-    <h1 style="font-family:'Newsreader',serif;font-size:44px;font-weight:400;line-height:1.15;letter-spacing:-0.8px;margin:0 auto 24px;max-width:760px;text-wrap:balance;">REON-NVS: Real-Time Online Novel-View Synthesis from Sparse-View Videos</h1>
+    <h1 class="title" style="font-family:'Newsreader',serif;font-size:44px;font-weight:400;line-height:1.15;letter-spacing:-0.8px;margin:0 auto 24px;max-width:760px;text-wrap:balance;">REON-NVS: Real-Time Online Novel-View Synthesis from Sparse-View Videos</h1>
     <div style="font-size:16px;line-height:1.6;color:#141413;margin-bottom:6px;">
       <a href="https://daeyeonkr.github.io/" target="_blank" style="text-decoration:none;">Daeyeon Kim</a>, <a href="#" style="text-decoration:none;">Jinhyeok Kim</a>, <a href="#" style="text-decoration:none;">Gangmin Kwon</a>, <a href="#" style="text-decoration:none;">Seungjoo Shin</a>, <a href="#" style="text-decoration:none;">Sunghyun Cho</a>
     </div>
     <div style="font-size:14px;color:#5b6573;margin-bottom:28px;">POSTECH</div>
     <div style="font-family:'Newsreader',serif;font-size:22px;font-style:italic;color:#141413;margin-bottom:16px;">ECCV 2026</div>
-    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
-      <a href="#" style="display:inline-flex;align-items:center;justify-content:center;min-width:132px;box-sizing:border-box;white-space:nowrap;gap:7px;background:#141413;color:#faf9f5;text-decoration:none;font-size:13.5px;font-weight:500;border-radius:999px;padding:9px 20px;" style-hover="background:#38598b;color:#faf9f5;"><span style="font-size:15px;line-height:1;">📄</span>Paper</a>
-      <a href="#" style="display:inline-flex;align-items:center;justify-content:center;min-width:132px;box-sizing:border-box;white-space:nowrap;gap:7px;background:#141413;color:#faf9f5;text-decoration:none;font-size:13.5px;font-weight:500;border-radius:999px;padding:9px 20px;" style-hover="background:#38598b;color:#faf9f5;"><span style="font-size:15px;line-height:1;">💻</span>Code</a>
-      <a href="#" style="display:inline-flex;align-items:center;justify-content:center;min-width:132px;box-sizing:border-box;white-space:nowrap;gap:7px;background:#141413;color:#faf9f5;text-decoration:none;font-size:13.5px;font-weight:500;border-radius:999px;padding:9px 20px;" style-hover="background:#38598b;color:#faf9f5;"><span style="font-size:15px;line-height:1;">📦</span>Dataset</a>
+    <div class="btn-row" style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
+      <a href="#" class="btn" style="display:inline-flex;align-items:center;justify-content:center;min-width:132px;box-sizing:border-box;white-space:nowrap;gap:7px;background:#141413;color:#faf9f5;text-decoration:none;font-size:13.5px;font-weight:500;border-radius:999px;padding:9px 20px;" style-hover="background:#38598b;color:#faf9f5;"><span style="font-size:15px;line-height:1;">📄</span>Paper</a>
+      <a href="#" class="btn" style="display:inline-flex;align-items:center;justify-content:center;min-width:132px;box-sizing:border-box;white-space:nowrap;gap:7px;background:#141413;color:#faf9f5;text-decoration:none;font-size:13.5px;font-weight:500;border-radius:999px;padding:9px 20px;" style-hover="background:#38598b;color:#faf9f5;"><span style="font-size:15px;line-height:1;">💻</span>Code</a>
+      <a href="#" class="btn" style="display:inline-flex;align-items:center;justify-content:center;min-width:132px;box-sizing:border-box;white-space:nowrap;gap:7px;background:#141413;color:#faf9f5;text-decoration:none;font-size:13.5px;font-weight:500;border-radius:999px;padding:9px 20px;" style-hover="background:#38598b;color:#faf9f5;"><span style="font-size:15px;line-height:1;">📦</span>Dataset</a>
     </div>
   </div>
 
-  <div style="margin-top:120px;">
-    <h2 style="font-family:'Newsreader',serif;font-size:30px;font-weight:400;letter-spacing:-0.3px;margin:0 0 20px;text-align:center;">Abstract</h2>
-    <div style="background:#ffffff;border:1px solid #e8e5dd;border-radius:14px;padding:28px 30px;">
+  <div class="section" style="margin-top:120px;">
+    <h2 class="h2" style="font-family:'Newsreader',serif;font-size:30px;font-weight:400;letter-spacing:-0.3px;margin:0 0 20px;text-align:center;">Abstract</h2>
+    <div class="card" style="background:#ffffff;border:1px solid #e8e5dd;border-radius:14px;padding:28px 30px;">
       {{ filmAnim }}
       <p style="font-size:14.5px;line-height:1.75;color:#3d4552;margin:24px 0 0;text-wrap:pretty;">Recent advances in online reconstruction of dynamic scenes demonstrate impressive visual quality, showing potential for real-world applications such as VR content streaming. Yet, existing online reconstruction methods still require a large number of input views and time-consuming iterative optimization. Moreover, reliable pose estimation, a prerequisite for NVS, introduces additional delay. In this paper, we present REON-NVS, a feedforward online NVS framework for sparse-view input video streams, which goes from pose estimation to novel-view reconstruction in real time. REON-NVS comprises two main components. First, our method leverages a feedforward pose estimator and mapper that replace conventional camera pose optimization pipelines. Second, we design a scene reconstructor built upon a state-space model (SSM), which efficiently synthesizes temporally consistent novel-view images by exploiting information from previous frames. To train and evaluate our approach in realistic in-the-wild streaming scenarios, we introduce a new multi-view dynamic scene dataset of 150 dynamic scenes captured with moving cameras. Extensive experiments demonstrate that REON-NVS achieves high visual quality while operating in real time (32 FPS), validating its applicability in real-world scenarios.</p>
     </div>
   </div>
 
-  <div style="margin-top:120px;">
-    <h2 style="font-family:'Newsreader',serif;font-size:30px;font-weight:400;letter-spacing:-0.3px;margin:0 0 20px;text-align:center;">Method</h2>
-    <div style="background:#ffffff;border:1px solid #e8e5dd;border-radius:14px;padding:28px 30px;">
+  <div class="section" style="margin-top:120px;">
+    <h2 class="h2" style="font-family:'Newsreader',serif;font-size:30px;font-weight:400;letter-spacing:-0.3px;margin:0 0 20px;text-align:center;">Method</h2>
+    <div class="card" style="background:#ffffff;border:1px solid #e8e5dd;border-radius:14px;padding:28px 30px;">
       <img src="assets/method-figure.png" alt="REON-NVS framework" style="width:100%;display:block;border-radius:10px;" />
       <p style="font-size:14.5px;line-height:1.75;color:#3d4552;margin:24px 0 0;text-wrap:pretty;">REON-NVS combines a feedforward <strong style="font-weight:600;color:#141413;">pose estimator and mapper</strong> with an SSM-based <strong style="font-weight:600;color:#141413;">scene reconstructor</strong> to synthesize temporally consistent novel views in real time.</p>
     </div>
   </div>
 
-  <div style="margin-top:120px;">
-    <h2 style="font-family:'Newsreader',serif;font-size:30px;font-weight:400;letter-spacing:-0.3px;margin:0 0 20px;text-align:center;">Results</h2>
-    <div style="background:#ffffff;border:1px solid #e8e5dd;border-radius:14px;padding:28px 30px 26px;">
-      <div key="{{ sceneKey }}" style="display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap;animation:sceneFade 0.45s ease-out;">
-        <div style="display:flex;flex-direction:column;gap:10px;width:150px;">
+  <div class="section" style="margin-top:120px;">
+    <h2 class="h2" style="font-family:'Newsreader',serif;font-size:30px;font-weight:400;letter-spacing:-0.3px;margin:0 0 20px;text-align:center;">Results</h2>
+    <div class="card" style="background:#ffffff;border:1px solid #e8e5dd;border-radius:14px;padding:28px 30px 26px;">
+      <div key="{{ sceneKey }}" class="results-row" style="display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap;animation:sceneFade 0.45s ease-out;">
+        <div class="results-inputs" style="display:flex;flex-direction:column;gap:10px;width:150px;">
           <div>
             <video key="{{ sceneIn1 }}" src="{{ sceneIn1 }}" autoPlay="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="width:100%;display:block;border-radius:10px;filter:brightness(1.15);"></video>
-            <div style="font-size:12px;color:#8a93a3;text-align:center;margin-top:6px;">Input · Cam 1</div>
+            <div class="cap" style="font-size:12px;color:#8a93a3;text-align:center;margin-top:6px;">Input · Cam 1</div>
           </div>
           <div>
             <video key="{{ sceneIn2 }}" src="{{ sceneIn2 }}" autoPlay="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="width:100%;display:block;border-radius:10px;filter:brightness(1.15);"></video>
-            <div style="font-size:12px;color:#8a93a3;text-align:center;margin-top:6px;">Input · Cam 2</div>
+            <div class="cap" style="font-size:12px;color:#8a93a3;text-align:center;margin-top:6px;">Input · Cam 2</div>
           </div>
         </div>
-        <div style="width:320px;">
+        <div class="results-output" style="width:320px;">
           <video key="{{ sceneOut }}" src="{{ sceneOut }}" autoPlay="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="width:100%;display:block;border-radius:10px;filter:brightness(1.15);"></video>
-          <div style="font-size:12px;color:#8a93a3;text-align:center;margin-top:6px;">Novel View</div>
+          <div class="cap" style="font-size:12px;color:#8a93a3;text-align:center;margin-top:6px;">Novel View</div>
         </div>
       </div>
-      <div style="display:flex;justify-content:center;align-items:center;gap:14px;margin-top:18px;">
+      <div class="scene-nav" style="display:flex;justify-content:center;align-items:center;gap:14px;margin-top:18px;">
         <button onClick="{{ prevScene }}" style="border:1px solid #e8e5dd;background:#ffffff;border-radius:999px;width:32px;height:32px;font-size:14px;color:#3d4552;cursor:pointer;" style-hover="background:#f3f1ea;">&#8592;</button>
         <sc-for list="{{ sceneDots }}" as="d" hint-placeholder-count="2">
           <button onClick="{{ d.go }}" style="border:none;background:{{ d.color }};border-radius:999px;width:9px;height:9px;padding:0;cursor:pointer;"></button>
@@ -106,11 +143,11 @@ a:hover{color:#38598b;}
 
 
   <sc-if value="{{ showBibtex }}" hint-placeholder-val="{{ true }}">
-  <div style="margin-top:120px;">
-    <h2 style="font-family:'Newsreader',serif;font-size:30px;font-weight:400;letter-spacing:-0.3px;margin:0 0 16px;text-align:center;">BibTeX</h2>
+  <div class="section" style="margin-top:120px;">
+    <h2 class="h2" style="font-family:'Newsreader',serif;font-size:30px;font-weight:400;letter-spacing:-0.3px;margin:0 0 16px;text-align:center;">BibTeX</h2>
     <div style="position:relative;">
     <button onClick="{{ copyBib }}" style="position:absolute;top:14px;right:14px;display:inline-flex;align-items:center;gap:6px;background:#2e2e2c;color:#e8e5dd;border:1px solid #4a4a47;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;" style-hover="background:#3d3d3a;" title="Copy BibTeX">{{ copyLabel }}</button>
-    <pre style="background:#141413;color:#e8e5dd;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.7;border-radius:14px;padding:24px 28px;overflow-x:auto;margin:0;">@article{kim2026reonnvs,
+    <pre class="bibtex" style="background:#141413;color:#e8e5dd;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.7;border-radius:14px;padding:24px 28px;overflow-x:auto;margin:0;">@article{kim2026reonnvs,
   title   = {REON-NVS: Real-Time Online Novel-View Synthesis from Sparse-View Videos},
   author  = {Kim, Daeyeon and Kim, Jinhyeok and Kwon, Gangmin and Shin, Seungjoo and Cho, Sunghyun},
   year    = {2026}
@@ -215,8 +252,8 @@ class Component extends DCLogic {
     };
     const capStyle = {fontSize:11, color:'#8a93a3', textAlign:'center', marginTop:6};
     const arrow = h('div', {style:{fontSize:32, color:'#c9c4b8', flexShrink:0, marginBottom:23}}, '\u2192');
-    return h('div', {style:{display:'flex', alignItems:'center', justifyContent:'center', gap:18, flexWrap:'wrap'}},
-      h('div', {style:{display:'flex', gap:14}},
+    return h('div', {className:'film-row', style:{display:'flex', alignItems:'center', justifyContent:'center', gap:18, flexWrap:'wrap'}},
+      h('div', {className:'film-strips', style:{display:'flex', gap:14}},
         h('div', null, strip('vc1'), h('div', {style:capStyle}, 'Cam 1')),
         h('div', null, strip('vc2'), h('div', {style:capStyle}, 'Cam 2'))),
       arrow,
