@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GG4D</title>
+<link rel="canonical" href="https://daeyeonkr.github.io/publication/gg4d/">
+<meta name="description" content="GG4D: Geometry-Guided Dynamic Novel-View Synthesis. A feedforward framework that combines an explicit 4D point cloud with an implicit real-time renderer.">
+<meta name="author" content="Daeyeon Kim">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Daeyeon Kim">
+<meta property="og:title" content="GG4D: Geometry-Guided Dynamic Novel-View Synthesis">
+<meta property="og:description" content="A feedforward framework for dynamic novel-view synthesis that combines an explicit 4D point cloud with an implicit real-time renderer.">
+<meta property="og:url" content="https://daeyeonkr.github.io/publication/gg4d/">
+<meta property="og:image" content="https://daeyeonkr.github.io/publication/gg4d/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GG4D: Geometry-Guided Dynamic Novel-View Synthesis">
+<meta name="twitter:description" content="A feedforward framework for dynamic novel-view synthesis that combines an explicit 4D point cloud with an implicit real-time renderer.">
+<meta name="twitter:image" content="https://daeyeonkr.github.io/publication/gg4d/assets/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141413; --body:#3d4552; --muted:#5b6573; --cap:#8a93a3;
+    --line:#e8e5dd; --line-soft:#f1efe8; --paper:#ffffff; --paper-2:#faf9f5;
+    --accent:#4a7fc4; --accent-dark:#38598b;
+    --first:#ffe1e7; --second:#dceefa;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;background:var(--paper);color:var(--ink);}
+  body{font-family:'Inter',system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:var(--accent);} a:hover{color:var(--accent-dark);}
+  .page{width:100%;max-width:880px;margin:0 auto;padding:72px 32px 80px;}
+  .serif{font-family:'Newsreader',Georgia,serif;font-weight:400;}
+  .title{font-family:'Newsreader',Georgia,serif;font-size:44px;font-weight:400;line-height:1.15;letter-spacing:-0.8px;margin:0 auto 24px;max-width:760px;text-wrap:balance;text-align:center;}
+  .authors{font-size:16px;line-height:1.6;text-align:center;margin-bottom:6px;}
+  .authors a{text-decoration:none;color:var(--ink);} .authors a:hover{color:var(--accent);}
+  .authors sup{font-size:11px;color:var(--muted);margin-left:1px;}
+  .affil{font-size:14px;color:var(--muted);text-align:center;margin-bottom:28px;}
+  .venue{font-family:'Newsreader',Georgia,serif;font-size:22px;font-style:italic;text-align:center;margin-bottom:16px;}
+  .btn-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;min-width:132px;white-space:nowrap;gap:7px;background:var(--ink);color:#faf9f5;text-decoration:none;font-size:14px;font-weight:500;padding:10px 18px;border-radius:999px;transition:background .15s;}
+  .btn:hover{background:#2e2e2c;color:#faf9f5;}
+  .btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+  .section{margin-top:120px;}
+  .h2{font-family:'Newsreader',Georgia,serif;font-size:30px;font-weight:400;letter-spacing:-0.3px;margin:0 0 20px;text-align:center;}
+  .h3{font-family:'Newsreader',Georgia,serif;font-size:21px;font-weight:400;letter-spacing:-0.2px;margin:0 0 12px;text-align:center;color:var(--ink);}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:28px 30px;}
+  .card p{font-size:14.5px;line-height:1.75;color:var(--body);margin:0;text-wrap:pretty;}
+  .card p+p{margin-top:14px;}
+  .card strong{font-weight:600;color:var(--ink);}
+  .fig{width:100%;display:block;border-radius:10px;}
+  .cap{font-size:12px;color:var(--cap);text-align:center;margin-top:6px;}
+
+  /* teaser */
+  .teaser{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;}
+  .slot{width:100%;aspect-ratio:1/1;border:1.5px dashed #c9c4b8;border-radius:10px;background:var(--paper-2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cap);text-align:center;padding:12px;}
+  .teaser-note{font-size:13px;color:var(--muted);text-align:center;margin-top:16px;}
+
+
+  /* results */
+  .tabs{display:flex;justify-content:center;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+  .tab{border:1px solid var(--line);background:var(--paper);color:var(--body);border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;font-family:inherit;}
+  .tab[aria-selected="true"]{background:var(--ink);color:#faf9f5;border-color:var(--ink);}
+  .results-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;animation:sceneFade .45s ease-out;}
+  .scene-nav{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:18px;}
+  .nav-btn{border:1px solid var(--line);background:var(--paper);border-radius:999px;width:32px;height:32px;font-size:14px;color:var(--body);cursor:pointer;font-family:inherit;}
+  .nav-btn:hover{background:#f3f1ea;}
+  .dots{display:flex;gap:8px;}
+  .dot{border:none;background:#d8d4c9;border-radius:999px;width:9px;height:9px;padding:0;cursor:pointer;}
+  .dot[aria-current="true"]{background:var(--accent-dark);}
+  .scene-name{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cap);text-align:center;margin-top:10px;}
+
+  /* table */
+  .tbl-wrap{overflow-x:auto;margin-top:4px;}
+  table{border-collapse:collapse;width:100%;min-width:720px;font-size:12.5px;font-variant-numeric:tabular-nums;}
+  th,td{padding:6px 8px;text-align:center;white-space:nowrap;}
+  th{font-weight:500;color:var(--muted);}
+  td:first-child,th:first-child{text-align:left;}
+  thead tr:first-child th{border-top:1.5px solid var(--ink);padding-top:10px;}
+  thead tr:last-child th{border-bottom:1px solid var(--ink);}
+  tbody tr:last-child td{border-bottom:1.5px solid var(--ink);}
+  .grp{border-bottom:1px solid var(--line);}
+  .rowhead td{background:var(--paper-2);font-style:italic;font-weight:500;text-align:center;color:var(--muted);}
+  .ours td{font-weight:600;}
+  .f{background:var(--first);} .s{background:var(--second);}
+  .tbl-note{font-size:12px;color:var(--cap);margin-top:10px;text-align:center;}
+
+  /* bibtex */
+  .bib-wrap{position:relative;}
+  .bibtex{background:var(--ink);color:#e8e5dd;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.7;border-radius:14px;padding:24px 28px;overflow-x:auto;margin:0;}
+  .copy{position:absolute;top:14px;right:14px;display:inline-flex;align-items:center;gap:6px;background:#2e2e2c;color:#e8e5dd;border:1px solid #4a4a47;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;}
+  .copy:hover{background:#3d3d3a;}
+
+  .foot{margin-top:80px;text-align:center;font-size:12.5px;color:var(--cap);}
+
+  @keyframes sceneFade{from{opacity:0;transform:translateX(24px);}to{opacity:1;transform:translateX(0);}}
+  @media (prefers-reduced-motion:reduce){.results-row{animation:none;}}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  @media (max-width:720px){
+    .page{padding:44px 16px 56px;}
+    .title{font-size:30px;letter-spacing:-0.4px;margin-bottom:18px;}
+    .section{margin-top:64px;}
+    .h2{font-size:24px;margin-bottom:14px;}
+    .card{padding:16px 14px;}
+    .btn-row{gap:8px;flex-wrap:nowrap;}
+    .btn{min-width:0;flex:1 1 0;padding:9px 8px;font-size:12.5px;gap:5px;}
+    .two{grid-template-columns:1fr;}
+    .results-row{gap:8px;}
+    .cap{font-size:10.5px;margin-top:4px;}
+    .bibtex{padding:16px 14px;font-size:11px;}
+  }
+  @media (max-width:430px){.title{font-size:26px;}.teaser{gap:8px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1 class="title">GG4D: Geometry-Guided Dynamic Novel-View Synthesis</h1>
+    <div class="authors">
+      <!-- TODO authors: replace names, links and affiliation markers -->
+      <a href="https://daeyeonkr.github.io/">Author One</a><sup>1</sup>,
+      <a href="#">Author Two</a><sup>1</sup>,
+      <a href="#">Author Three</a><sup>1</sup>,
+      <a href="#">Author Four</a><sup>1</sup>
+    </div>
+    <div class="affil" style="margin-bottom:0;"><sup>1</sup>POSTECH</div>
+  </header>
+
+  <!-- ===== Teaser ===== -->
+  <section class="section" style="margin-top:56px;">
+    <div class="card">
+      <div class="teaser">
+        <div>
+          <div class="slot">teaser<br>input video</div>
+          <div class="cap">Input monocular video</div>
+        </div>
+        <div>
+          <div class="slot">teaser<br>GG4D output</div>
+          <div class="cap">GG4D free-viewpoint rendering</div>
+        </div>
+      </div>
+      <div class="teaser-note">From a casually captured video, GG4D builds a 4D point cloud and a scene memory once, then renders any viewpoint at any timestep in real time.</div>
+    </div>
+  </section>
+
+  <!-- ===== Abstract ===== -->
+  <section class="section">
+    <h2 class="h2">Abstract</h2>
+    <div class="card">
+      <p>Dynamic novel-view synthesis lets us freely explore a captured moving scene from any viewpoint, enabling free-viewpoint video and immersive VR and AR. To this end, feedforward methods synthesize novel views in a single forward pass without per-scene optimization. Among them, one line predicts explicit 3D representations such as 3D Gaussians, while another directly predicts target views from input images using a learned implicit renderer. Yet explicit methods are limited in fidelity by geometry errors and their fixed rendering process, and implicit renderers without shared 3D geometry struggle to maintain multi-view consistency.</p>
+      <p>In this paper, we present <strong>GG4D</strong>, a feedforward framework for dynamic novel-view synthesis that combines explicit scene geometry with implicit image synthesis to achieve both multi-view consistency and high rendering fidelity. First, to aggregate geometry across frames without mixing dynamic regions from different timesteps, we propose an efficient segmentation module that separates static and dynamic regions without off-the-shelf optical flow or segmentation models. Using this separation, we construct a 4D point cloud for explicit 3D representation that guides novel-view synthesis. Second, to enable high-fidelity rendering in real time, we propose <strong>Large Chunk Attentive Test-Time Training (LaCAT)</strong>, which effectively encodes input observations into a compact scene memory through attention. Our implicit renderer, built upon it, summarizes the input video once and reuses this information to synthesize high-quality novel views in real time. Extensive experiments demonstrate that GG4D achieves state-of-the-art quality and multi-view consistency on both monocular and multi-view dynamic scene benchmarks, taking a step toward immersive applications.</p>
+    </div>
+  </section>
+
+  <!-- ===== Method ===== -->
+  <section class="section">
+    <h2 class="h2">Method</h2>
+    <div class="card">
+      <img class="fig" src="assets/overview.png" alt="GG4D overview: scene construction and rendering stages">
+      <p style="margin-top:24px;">GG4D runs in two stages. In <strong>scene construction</strong>, a frozen geometric foundation model (VGGT-&Omega;) estimates depth and camera poses, our <strong>dynamic region segmentation</strong> separates static and dynamic regions from its internal features, and the resulting <strong>4D point cloud</strong> accumulates static geometry across time while keeping dynamic geometry per timestep. In parallel, the input frames are written once into a <strong>scene memory</strong> with LaCAT. In <strong>rendering</strong>, the point cloud is projected onto the target camera at the requested timestep, and the renderer reads the scene memory to synthesize the image, so the per-view cost stays nearly constant regardless of the number of input frames.</p>
+
+    </div>
+  </section>
+
+  <!-- ===== Results ===== -->
+  <section class="section">
+    <h2 class="h2">Results</h2>
+
+    <h3 class="h3">Dynamic Region Segmentation</h3>
+    <div class="card" style="padding-bottom:26px;">
+      <div class="tabs" role="tablist" id="seg-tabs"></div>
+      <div class="results-row" id="seg-row">
+        <div><div class="slot">input</div><div class="cap">Input video</div></div>
+        <div><div class="slot">baseline</div><div class="cap">Baseline</div></div>
+        <div><div class="slot">GG4D</div><div class="cap">GG4D</div></div>
+      </div>
+      <div class="scene-name" id="seg-name"></div>
+      <div class="scene-nav">
+        <button class="nav-btn" id="seg-prev" aria-label="Previous scene">&#8592;</button>
+        <div class="dots" id="seg-dots"></div>
+        <button class="nav-btn" id="seg-next" aria-label="Next scene">&#8594;</button>
+      </div>
+    </div>
+    <h3 class="h3" style="margin-top:44px;">Dynamic Novel-View Synthesis</h3>
+    <div class="card" style="padding-bottom:26px;">
+      <div class="tabs" role="tablist" id="nvs-tabs"></div>
+      <div class="results-row" id="nvs-row">
+        <div><div class="slot">input</div><div class="cap">Input video</div></div>
+        <div><div class="slot">point cloud</div><div class="cap">4D point cloud projection</div></div>
+        <div><div class="slot">GG4D</div><div class="cap">GG4D</div></div>
+      </div>
+      <div class="scene-name" id="nvs-name"></div>
+      <div class="scene-nav">
+        <button class="nav-btn" id="nvs-prev" aria-label="Previous scene">&#8592;</button>
+        <div class="dots" id="nvs-dots"></div>
+        <button class="nav-btn" id="nvs-next" aria-label="Next scene">&#8594;</button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== Quantitative ===== -->
+  <section class="section">
+    <h2 class="h2">Quantitative Comparison</h2>
+    <div class="card">
+      <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="3">Method</th>
+            <th colspan="8" class="grp">Monocular</th>
+            <th colspan="8" class="grp">Multi-view</th>
+          </tr>
+          <tr>
+            <th colspan="4" class="grp">DyCheck</th><th colspan="4" class="grp">NVIDIA</th>
+            <th colspan="4" class="grp">Neural3D</th><th colspan="4" class="grp">REON</th>
+          </tr>
+          <tr>
+            <th>mPSNR&uarr;</th><th>mSSIM&uarr;</th><th>mLPIPS&darr;</th><th>MEt3R&darr;</th>
+            <th>PSNR&uarr;</th><th>SSIM&uarr;</th><th>LPIPS&darr;</th><th>MEt3R&darr;</th>
+            <th>PSNR&uarr;</th><th>SSIM&uarr;</th><th>LPIPS&darr;</th><th>MEt3R&darr;</th>
+            <th>PSNR&uarr;</th><th>SSIM&uarr;</th><th>LPIPS&darr;</th><th>MEt3R&darr;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="rowhead"><td colspan="17">Optimization-based</td></tr>
+          <tr><td>MoSca</td><td>13.94</td><td>0.311</td><td>0.234</td><td>0.553</td><td class="s">21.01</td><td class="s">0.619</td><td class="s">0.163</td><td>0.271</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+          <tr><td>IGS</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>15.03</td><td>0.412</td><td>0.609</td><td>0.626</td><td>19.25</td><td>0.509</td><td>0.459</td><td>0.412</td></tr>
+          <tr class="rowhead"><td colspan="17">Feedforward</td></tr>
+          <tr><td>4DGT</td><td>12.10</td><td>0.287</td><td>0.250</td><td>0.430</td><td>14.67</td><td>0.319</td><td>0.640</td><td>0.509</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+          <tr><td>MoVieS</td><td>13.79</td><td>0.345</td><td class="s">0.205</td><td class="s">0.415</td><td>18.11</td><td>0.536</td><td>0.269</td><td>0.257</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+          <tr><td>FSM</td><td class="s">14.74</td><td class="s">0.357</td><td>0.224</td><td>0.476</td><td>20.54</td><td>0.544</td><td>0.314</td><td class="s">0.168</td><td>14.70</td><td>0.488</td><td>0.630</td><td>0.436</td><td>20.04</td><td>0.511</td><td class="s">0.301</td><td class="s">0.158</td></tr>
+          <tr><td>REON</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td class="s">20.63</td><td class="s">0.625</td><td class="s">0.396</td><td class="s">0.251</td><td class="s">23.37</td><td class="s">0.615</td><td>0.311</td><td>0.219</td></tr>
+          <tr class="ours"><td>GG4D (Ours)</td><td class="f">18.38</td><td class="f">0.397</td><td class="f">0.138</td><td class="f">0.371</td><td class="f">22.23</td><td class="f">0.661</td><td class="f">0.144</td><td class="f">0.164</td><td class="f">23.27</td><td class="f">0.770</td><td class="f">0.147</td><td class="f">0.226</td><td class="f">26.67</td><td class="f">0.762</td><td class="f">0.143</td><td class="f">0.128</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="tbl-note"><span class="f" style="padding:1px 6px;border-radius:4px;">best</span>&nbsp; <span class="s" style="padding:1px 6px;border-radius:4px;">second best</span>&nbsp; &ldquo;&ndash;&rdquo; denotes settings a method does not support.</div>
+    </div>
+  </section>
+
+  <!-- ===== BibTeX ===== -->
+  <section class="section">
+    <h2 class="h2">BibTeX</h2>
+    <div class="bib-wrap">
+      <button class="copy" id="copy" title="Copy BibTeX">&#128203;</button>
+<pre class="bibtex" id="bib">@article{gg4d2026,
+  title   = {GG4D: Geometry-Guided Dynamic Novel-View Synthesis},
+  author  = {TODO},
+  journal = {arXiv preprint},
+  year    = {2026}
+}</pre>
+    </div>
+  </section>
+
+  <div class="foot">Project page template shared with <a href="https://daeyeonkr.github.io/publication/reon-nvs/">REON-NVS</a>.</div>
+</div>
+
+<script>
+(function(){
+  // ---- scene lists per gallery: fill in later ----
+  const NVS = [
+    { name: 'Pexels', scenes: [ { id: 'scene-1' }, { id: 'scene-2' }, { id: 'scene-3' } ] },
+    { name: 'DAVIS',  scenes: [ { id: 'scene-1' }, { id: 'scene-2' } ] },
+  ];
+  const SEG = [
+    { name: 'DAVIS', scenes: [ { id: 'scene-1' }, { id: 'scene-2' }, { id: 'scene-3' } ] },
+  ];
+
+  function gallery(prefix, GROUPS){
+    let g = 0, i = 0;
+    const tabs = document.getElementById(prefix + '-tabs');
+    const dots = document.getElementById(prefix + '-dots');
+    const row  = document.getElementById(prefix + '-row');
+    const name = document.getElementById(prefix + '-name');
+    function buildTabs(){
+      tabs.innerHTML = '';
+      if (GROUPS.length < 2) { tabs.style.display = 'none'; return; }
+      GROUPS.forEach((grp, k) => {
+        const b = document.createElement('button');
+        b.className = 'tab'; b.setAttribute('role','tab'); b.textContent = grp.name;
+        b.setAttribute('aria-selected', k === g ? 'true' : 'false');
+        b.onclick = () => { g = k; i = 0; render(); };
+        tabs.appendChild(b);
+      });
+    }
+    function buildDots(){
+      dots.innerHTML = '';
+      GROUPS[g].scenes.forEach((_, k) => {
+        const d = document.createElement('button');
+        d.className = 'dot'; d.setAttribute('aria-label', 'Scene ' + (k+1));
+        if (k === i) d.setAttribute('aria-current', 'true');
+        d.onclick = () => { i = k; render(); };
+        dots.appendChild(d);
+      });
+    }
+    function render(){
+      const sc = GROUPS[g].scenes[i];
+      buildTabs(); buildDots();
+      row.style.animation = 'none'; void row.offsetWidth; row.style.animation = '';
+      name.textContent = GROUPS[g].name + ' / ' + sc.id;
+      // TODO: set video sources from sc here
+    }
+    document.getElementById(prefix + '-prev').onclick = () => { const n = GROUPS[g].scenes.length; i = (i - 1 + n) % n; render(); };
+    document.getElementById(prefix + '-next').onclick = () => { const n = GROUPS[g].scenes.length; i = (i + 1) % n; render(); };
+    render();
+  }
+  gallery('nvs', NVS);
+  gallery('seg', SEG);
+
+  // ---- bibtex copy ----
+  const btn = document.getElementById('copy');
+  btn.onclick = () => {
+    const text = document.getElementById('bib').textContent;
+    const ok = () => { btn.textContent = '\u2705'; setTimeout(() => { btn.innerHTML = '&#128203;'; }, 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, ok); else ok();
+  };
+})();
+</script>
+</body>
+</html>
