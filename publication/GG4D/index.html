@@ -355,7 +355,7 @@
   const SEG_START = DAVIS.indexOf('gold-fish');
   const SEG_ORDER = DAVIS.slice(SEG_START).concat(DAVIS.slice(0, SEG_START));
   // NVS comparison gallery: hand-picked scenes first, then the rest in the usual order
-  const NVS_FIRST = ['car-shadow','libby','motorbike','stunt'];
+  const NVS_FIRST = ['tennis','car-shadow','libby','motorbike','stunt'];
   const NVS_ORDER = NVS_FIRST.concat(DAVIS.filter(id => !NVS_FIRST.includes(id)));
   const NVS_GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: NVS_ORDER.map(id => ({ id })) } ];
   const SEG_GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: SEG_ORDER.map(id => ({ id })) } ];
