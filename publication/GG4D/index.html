@@ -345,6 +345,9 @@
   // ---- scene lists per gallery ----
   const DAVIS = ['blackswan','bmx-trees','breakdance-flare','camel','car-shadow','cows','dance-jump','dog','elephant','flamingo','gold-fish','libby','lucia','motorbike','rollerblade','stunt','tennis'];
   const GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: DAVIS.map(id => ({ id })) } ];
+  // segmentation gallery opens on gold-fish, then the rest in the usual order
+  const SEG_ORDER = ['gold-fish'].concat(DAVIS.filter(id => id !== 'gold-fish'));
+  const SEG_GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: SEG_ORDER.map(id => ({ id })) } ];
   // sync:true columns share one clock (restart together); sync:false columns loop on their own
   const SEG_COLS = [
     { file: 'input.mp4',   cap: 'Input video',               sync: true },
@@ -417,7 +420,7 @@
     document.getElementById(prefix + '-next').onclick = () => { const n = GROUPS[g].scenes.length; i = (i + 1) % n; render(); };
     render();
   }
-  gallery('seg', GROUPS, SEG_COLS);
+  gallery('seg', SEG_GROUPS, SEG_COLS);
   gallery('nvs', GROUPS, NVS_COLS);
 })();
 </script>
