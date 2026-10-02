@@ -351,8 +351,9 @@
   // ---- scene lists per gallery ----
   const DAVIS = ['blackswan','bmx-trees','breakdance-flare','camel','car-shadow','cows','dance-jump','dog','elephant','flamingo','gold-fish','libby','lucia','motorbike','rollerblade','stunt','tennis'];
   const GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: DAVIS.map(id => ({ id })) } ];
-  // segmentation gallery opens on gold-fish, then the rest in the usual order
-  const SEG_ORDER = ['gold-fish'].concat(DAVIS.filter(id => id !== 'gold-fish'));
+  // segmentation gallery: same cycle, rotated to open on gold-fish
+  const SEG_START = DAVIS.indexOf('gold-fish');
+  const SEG_ORDER = DAVIS.slice(SEG_START).concat(DAVIS.slice(0, SEG_START));
   const SEG_GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: SEG_ORDER.map(id => ({ id })) } ];
   // sync:true columns share one clock (restart together); sync:false columns loop on their own
   const SEG_COLS = [
