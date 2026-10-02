@@ -44,6 +44,7 @@
   .wordmark::before{content:"GG4D";position:absolute;inset:0;padding:0 4px 6px;background:linear-gradient(to right,#f2b825,#17a67d);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
             -webkit-mask-image:linear-gradient(to bottom,#000,transparent);mask-image:linear-gradient(to bottom,#000,transparent);pointer-events:none;}
   .subtitle{display:block;font-family:var(--ui);font-size:24px;line-height:1.3;color:var(--body-muted);margin-top:16px;}
+  .nw{white-space:nowrap;} .m-br{display:none;}
   .authors{font-size:16px;line-height:1.5;}
   .authors a{color:var(--ink);text-decoration:none;} .authors a:hover{text-decoration:underline;}
   .authors sup{font-size:11px;color:var(--muted);margin-left:1px;}
@@ -143,6 +144,7 @@
     .scene-bar{justify-content:center;}
     .bibtex{font-size:12px;padding:44px 16px 16px;}
   }
+  @media (max-width:500px){.m-br{display:inline;}}
   @media (max-width:425px){.wordmark{font-size:58px;}.subtitle{font-size:17px;}}
 </style>
 </head>
@@ -150,7 +152,7 @@
 <div class="page">
 
   <header>
-    <h1 class="title"><span class="wordmark">GG4D</span><span class="subtitle">Geometry-Guided Dynamic Novel-View Synthesis</span></h1>
+    <h1 class="title"><span class="wordmark">GG4D</span><span class="subtitle"><span class="nw">Geometry-Guided</span> <br class="m-br"><span class="nw">Dynamic Novel-View Synthesis</span></span></h1>
     <div class="authors">
       <!-- TODO authors: replace names, links and affiliation markers -->
       <a href="https://daeyeonkr.github.io/">Author One</a><sup>1</sup>,
