@@ -102,6 +102,8 @@
   .results-row{display:grid;gap:16px;animation:sceneFade .45s ease-out;}
   .results-row.c4{grid-template-columns:repeat(4,1fr);}
   .results-row.c5{grid-template-columns:repeat(5,1fr);}
+  .results-row.c4.chev{grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;column-gap:10px;}
+  .pair-arrow.flat{padding-bottom:0;}
   .scene-bar{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:32px;flex-wrap:wrap;}
   .scene-name{font-family:var(--mono);font-size:14px;letter-spacing:0.28px;text-transform:uppercase;color:var(--slate);}
   .scene-nav{display:flex;align-items:center;gap:14px;}
@@ -168,7 +170,8 @@
     .ours-vid{box-shadow:0 0 0 3px #ed748a;}
     .wide{width:auto;left:auto;margin-left:0;}
     .results-row{gap:10px;}
-    .results-row.c4,.results-row.c5{grid-template-columns:repeat(2,1fr);}
+    .results-row.c4,.results-row.c5,.results-row.c4.chev{grid-template-columns:repeat(2,1fr);column-gap:10px;}
+    .results-row .pair-arrow{display:none;}
     .results-row.c5>div:first-child{grid-column:1 / -1;width:calc(50% - 5px);margin:0 auto;}
     .cap{font-size:15px;margin-top:6px;}
     .scene-bar{justify-content:center;}
@@ -379,15 +382,21 @@
   ];
 
   // ROWS scenes are shown at once, one per row; captions sit under the last row only.
-  function gallery(prefix, GROUPS, COLS, ROWS){
+  function gallery(prefix, GROUPS, COLS, ROWS, CHEV){
     ROWS = ROWS || 1;
     let g = 0, i = 0, token = 0;   // i = page index
     const tabs = document.getElementById(prefix + '-tabs');
     const dots = document.getElementById(prefix + '-dots');
     const row  = document.getElementById(prefix + '-row');
     const rows = [];
+    if (CHEV) row.classList.add('chev');
     for (let r = 0; r < ROWS; r++) {
-      const vids = COLS.map(c => {
+      const vids = COLS.map((c, ci) => {
+        if (CHEV && ci > 0) {   // chevron between neighbouring steps
+          const ch = document.createElement('div');
+          ch.className = 'pair-arrow' + (r === ROWS - 1 ? '' : ' flat'); ch.setAttribute('aria-hidden', 'true'); ch.textContent = '\u203a';
+          row.appendChild(ch);
+        }
         const w = document.createElement('div');
         const v = document.createElement('video');
         v.className = 'vid'; v.muted = true; v.playsInline = true; v.preload = 'auto';
@@ -446,7 +455,7 @@
     document.getElementById(prefix + '-next').onclick = () => { const n = nPages(); i = (i + 1) % n; render(); };
     render();
   }
-  gallery('seg', SEG_GROUPS, SEG_COLS, 2);
+  gallery('seg', SEG_GROUPS, SEG_COLS, 2, true);
   gallery('nvs', NVS_GROUPS, NVS_COLS);
 })();
 </script>
