@@ -31,27 +31,7 @@
     --mono:'JetBrains Mono',ui-monospace,monospace;
   }
   *{box-sizing:border-box;}
-  html{margin:0;background:var(--canvas);}
-  body{margin:0;color:var(--ink);position:relative;}
-  /* soft blue / pink wash behind the hero, fading into the white canvas */
-  .wash{position:absolute;top:0;left:0;right:0;height:780px;z-index:-1;overflow:hidden;pointer-events:none;
-        -webkit-mask-image:linear-gradient(to bottom,#000 30%,transparent);mask-image:linear-gradient(to bottom,#000 30%,transparent);}
-  /* two wide gradient sheets sliding sideways at different speeds, gently heaving */
-  .wash i{position:absolute;display:block;left:-15%;right:-15%;filter:blur(70px);will-change:transform,background-position;}
-  .wash i:nth-child(1){top:-300px;height:620px;opacity:.28;
-    background:linear-gradient(100deg,#72bde5,#ff98a7,#72bde5,#ff98a7,#72bde5);background-size:200% 100%;
-    animation:flow1 16s linear infinite,heave1 7s ease-in-out infinite alternate;}
-  .wash i:nth-child(2){top:-200px;height:520px;opacity:.2;
-    background:linear-gradient(80deg,#ff98a7,#72bde5,#ff98a7,#72bde5,#ff98a7);background-size:300% 100%;
-    animation:flow2 23s linear infinite,heave2 9s ease-in-out infinite alternate;}
-  .wash i:nth-child(3){display:none;}
-  @keyframes flow1{from{background-position:0% 0;}to{background-position:200% 0;}}
-  @keyframes flow2{from{background-position:150% 0;}to{background-position:0% 0;}}
-  @keyframes heave1{from{transform:translateY(-40px) rotate(-3deg);}to{transform:translateY(60px) rotate(3deg);}}
-  @keyframes heave2{from{transform:translateY(50px) rotate(4deg);}to{transform:translateY(-50px) rotate(-3deg);}}
-  @media (prefers-reduced-motion:reduce){.wash i{animation:none;}}
-  /* full-bleed tinted surface behind a section */
-  .tint::before{content:"";position:absolute;top:-64px;bottom:-64px;left:50%;width:100vw;margin-left:-50vw;z-index:-1;background:#eef3fb;}
+  html,body{margin:0;background:var(--canvas);color:var(--ink);}
   body{font-family:var(--ui);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
   a{color:var(--action-blue);}
   .page{width:100%;max-width:1184px;margin:0 auto;padding:96px 32px 80px;}
@@ -80,16 +60,6 @@
   .gg::before{content:"GG4D";position:absolute;inset:0;background:linear-gradient(to right,#72bde5,#ff98a7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
        -webkit-mask-image:linear-gradient(to bottom,#000,transparent);mask-image:linear-gradient(to bottom,#000,transparent);pointer-events:none;}
   .tldr p{font-size:24px;line-height:1.3;color:var(--ink);margin:12px 0 0;text-wrap:balance;}
-
-  /* white outline so hero text stays legible over the color wash */
-  .subtitle,.authors,.affil,.tldr-tag,.tldr p{text-shadow:-1px -1px 0 #fff,1px -1px 0 #fff,-1px 1px 0 #fff,1px 1px 0 #fff,0 -1.5px 0 #fff,0 1.5px 0 #fff,-1.5px 0 0 #fff,1.5px 0 0 #fff,0 0 6px #fff,0 0 12px #fff;}
-  .wordmark,.gg{text-shadow:none;filter:drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff) drop-shadow(0 0 3px #fff);}
-  .tldr-tag svg{filter:drop-shadow(0 0 1px #fff) drop-shadow(0 0 2px #fff);}
-
-  /* soft white glow that fades out around hero text, for legibility over the color wash */
-  .subtitle,.authors,.affil,.tldr-tag,.tldr p{text-shadow:0 0 6px #fff,0 0 12px #fff,0 0 22px #fff,0 0 36px rgba(255,255,255,.9),0 0 56px rgba(255,255,255,.7);}
-  .wordmark,.gg{text-shadow:none;filter:drop-shadow(0 0 6px #fff) drop-shadow(0 0 16px rgba(255,255,255,.9)) drop-shadow(0 0 32px rgba(255,255,255,.7));}
-  .tldr-tag svg{filter:drop-shadow(0 0 5px #fff) drop-shadow(0 0 12px #fff);}
 
   /* media */
   .vid{width:100%;aspect-ratio:1/1;display:block;border-radius:16px;background:var(--soft-stone);object-fit:cover;}
@@ -187,8 +157,6 @@
     .vid{border-radius:8px;}
     .ours-vid{box-shadow:0 0 0 3px #ed748a;}
     .wide{width:auto;left:auto;margin-left:0;}
-    .tint::before{top:-40px;bottom:-40px;}
-    .wash{height:560px;} .wash i{filter:blur(60px);}
     .results-row{gap:10px;}
     .results-row.c4,.results-row.c5{grid-template-columns:repeat(2,1fr);}
     .results-row.c5>div:first-child{grid-column:1 / -1;width:calc(50% - 5px);margin:0 auto;}
@@ -201,7 +169,6 @@
 </style>
 </head>
 <body>
-<div class="wash" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="page">
 
   <header>
