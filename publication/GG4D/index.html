@@ -86,6 +86,11 @@
   .wordmark,.gg{text-shadow:none;filter:drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff) drop-shadow(0 0 3px #fff);}
   .tldr-tag svg{filter:drop-shadow(0 0 1px #fff) drop-shadow(0 0 2px #fff);}
 
+  /* soft white glow that fades out around hero text, for legibility over the color wash */
+  .subtitle,.authors,.affil,.tldr-tag,.tldr p{text-shadow:0 0 6px #fff,0 0 12px #fff,0 0 22px #fff,0 0 36px rgba(255,255,255,.9),0 0 56px rgba(255,255,255,.7);}
+  .wordmark,.gg{text-shadow:none;filter:drop-shadow(0 0 6px #fff) drop-shadow(0 0 16px rgba(255,255,255,.9)) drop-shadow(0 0 32px rgba(255,255,255,.7));}
+  .tldr-tag svg{filter:drop-shadow(0 0 5px #fff) drop-shadow(0 0 12px #fff);}
+
   /* media */
   .vid{width:100%;aspect-ratio:1/1;display:block;border-radius:16px;background:var(--soft-stone);object-fit:cover;}
   .ours-vid{box-shadow:0 0 0 5px #ed748a;}
