@@ -101,6 +101,11 @@
   .band .nav-btn{border-color:#fff;color:#fff;} .band .nav-btn:hover{background:#fff;color:var(--deep-green);}
   .band .dot{background:rgba(255,255,255,.28);} .band .dot[aria-current="true"]{background:#fff;}
 
+  /* input -> output pairs */
+  .pairs{display:grid;grid-template-columns:repeat(2,1fr);gap:40px 48px;}
+  .pair{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;}
+  .pair-arrow{align-self:center;font-size:22px;color:var(--slate);padding-bottom:28px;}
+
   /* research table */
   .tbl-wrap{overflow-x:auto;}
   table{border-collapse:collapse;width:100%;min-width:900px;font-size:14px;font-variant-numeric:tabular-nums;}
@@ -147,6 +152,8 @@
     .band{padding:36px 16px 28px;border-radius:16px;}
     .vid{border-radius:8px;}
     .wide{width:auto;left:auto;margin-left:0;}
+    .pairs{grid-template-columns:1fr;gap:24px;}
+    .pair{gap:6px;} .pair-arrow{font-size:16px;padding-bottom:20px;}
     .results-row{gap:10px;}
     .results-row.c4,.results-row.c5{grid-template-columns:repeat(2,1fr);}
     .results-row.c5>div:first-child{grid-column:1 / -1;width:calc(50% - 5px);margin:0 auto;}
@@ -223,6 +230,56 @@
           <button class="nav-btn" id="nvs-next" aria-label="Next scene">&#8594;</button>
         </div>
       </div>
+  </section>
+
+  <!-- ===== Free-viewpoint pairs ===== -->
+  <section class="section wide">
+    <div class="sec-head">
+      <div class="label">Results / 03</div>
+      <h2 class="h2">Free-Viewpoint Rendering</h2>
+    </div>
+    <div class="pairs">
+      <div class="pair">
+        <div><video class="vid" src="assets/ytvos/2efb07554a/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
+        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
+        <div><video class="vid" src="assets/ytvos/2efb07554a/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">GG4D free-viewpoint rendering</div></div>
+      </div>
+      <div class="pair">
+        <div><video class="vid" src="assets/ytvos/3eb39d11ab/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
+        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
+        <div><video class="vid" src="assets/ytvos/3eb39d11ab/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">GG4D free-viewpoint rendering</div></div>
+      </div>
+      <div class="pair">
+        <div><video class="vid" src="assets/ytvos/9715cc83dc/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
+        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
+        <div><video class="vid" src="assets/ytvos/9715cc83dc/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">GG4D free-viewpoint rendering</div></div>
+      </div>
+      <div class="pair">
+        <div><video class="vid" src="assets/ytvos/e4b2095f58/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
+        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
+        <div><video class="vid" src="assets/ytvos/e4b2095f58/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">GG4D free-viewpoint rendering</div></div>
+      </div>
+      <div class="pair">
+        <div><video class="vid" src="assets/ytvos/a653d5c23b/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
+        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
+        <div><video class="vid" src="assets/ytvos/a653d5c23b/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">GG4D free-viewpoint rendering</div></div>
+      </div>
+      <div class="pair">
+        <div><video class="vid" src="assets/ytvos/f14409b6a3/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
+        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
+        <div><video class="vid" src="assets/ytvos/f14409b6a3/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">GG4D free-viewpoint rendering</div></div>
+      </div>
+      <div class="pair">
+        <div><video class="vid" src="assets/ytvos/997117a654/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
+        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
+        <div><video class="vid" src="assets/ytvos/997117a654/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">GG4D free-viewpoint rendering</div></div>
+      </div>
+      <div class="pair">
+        <div><video class="vid" src="assets/ytvos/65ab7e1d98/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
+        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
+        <div><video class="vid" src="assets/ytvos/65ab7e1d98/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">GG4D free-viewpoint rendering</div></div>
+      </div>
+    </div>
   </section>
 
   <!-- ===== Quantitative ===== -->
