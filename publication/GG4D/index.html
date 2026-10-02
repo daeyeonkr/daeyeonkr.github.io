@@ -31,7 +31,15 @@
     --mono:'JetBrains Mono',ui-monospace,monospace;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;background:var(--canvas);color:var(--ink);}
+  html{margin:0;background:var(--canvas);}
+  body{margin:0;color:var(--ink);position:relative;}
+  /* soft blue / pink wash behind the hero, fading into the white canvas */
+  body::before{content:"";position:absolute;top:0;left:0;right:0;height:1100px;z-index:-1;pointer-events:none;
+    background:radial-gradient(55% 75% at 12% 0%,rgba(114,189,229,.42),transparent 72%),
+               radial-gradient(55% 75% at 88% 0%,rgba(255,152,167,.42),transparent 72%),
+               radial-gradient(40% 50% at 50% 8%,rgba(110,145,211,.14),transparent 70%);}
+  /* full-bleed tinted surface behind a section */
+  .tint::before{content:"";position:absolute;top:-64px;bottom:-64px;left:50%;width:100vw;margin-left:-50vw;z-index:-1;background:#eef3fb;}
   body{font-family:var(--ui);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
   a{color:var(--action-blue);}
   .page{width:100%;max-width:1184px;margin:0 auto;padding:96px 32px 80px;}
@@ -157,6 +165,8 @@
     .vid{border-radius:8px;}
     .ours-vid{box-shadow:0 0 0 3px #ed748a;}
     .wide{width:auto;left:auto;margin-left:0;}
+    .tint::before{top:-40px;bottom:-40px;}
+    body::before{height:760px;}
     .results-row{gap:10px;}
     .results-row.c4,.results-row.c5{grid-template-columns:repeat(2,1fr);}
     .results-row.c5>div:first-child{grid-column:1 / -1;width:calc(50% - 5px);margin:0 auto;}
@@ -220,7 +230,7 @@
   </section>
 
   <!-- ===== NVS comparison ===== -->
-  <section class="section wide">
+  <section class="section wide tint">
     <div class="sec-head">
       <div class="label">Results / 02</div>
       <h2 class="h2">Dynamic Novel-View Synthesis</h2>
