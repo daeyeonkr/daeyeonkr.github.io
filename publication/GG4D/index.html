@@ -67,6 +67,13 @@
   .cap{font-size:clamp(18px,1.65vw,28px);line-height:1.25;color:var(--body-muted);margin-top:12px;text-align:center;text-wrap:balance;}
   .teaser{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:960px;margin:64px auto 0;}
   .teaser .vid{border-radius:22px;}
+  .teaser{transition:opacity .28s ease;}
+  .teaser.is-switching{opacity:0;}
+  .thumbs{display:flex;justify-content:center;gap:12px;margin-top:28px;flex-wrap:wrap;}
+  .thumb{border:none;padding:0;background:none;cursor:pointer;width:64px;height:64px;border-radius:8px;overflow:hidden;opacity:.5;transition:opacity .2s,box-shadow .2s;}
+  .thumb img{width:100%;height:100%;display:block;object-fit:cover;}
+  .thumb:hover{opacity:.85;}
+  .thumb[aria-current="true"]{opacity:1;box-shadow:0 0 0 3px #ed748a;}
 
   /* sections */
   .section{margin-top:128px;}
@@ -101,11 +108,6 @@
   .band .scene-name{color:rgba(255,255,255,.62);}
   .band .nav-btn{border-color:#fff;color:#fff;} .band .nav-btn:hover{background:#fff;color:var(--deep-green);}
   .band .dot{background:rgba(255,255,255,.28);} .band .dot[aria-current="true"]{background:#fff;}
-
-  /* input -> output pairs */
-  .pairs{display:grid;grid-template-columns:repeat(2,1fr);gap:40px 48px;}
-  .pair{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;}
-  .pair-arrow{align-self:center;font-size:22px;color:var(--slate);padding-bottom:44px;}
 
   /* research table */
   .tbl-wrap{overflow-x:auto;}
@@ -147,6 +149,7 @@
     .subtitle{font-size:19px;margin-top:12px;}
     .tldr{margin-top:44px;} .tldr p{font-size:19px;}
     .teaser{gap:10px;margin-top:44px;} .teaser .vid{border-radius:16px;}
+    .thumbs{gap:8px;margin-top:18px;} .thumb{width:36px;height:36px;border-radius:6px;}
     .section{margin-top:80px;}
     .sec-head{margin-bottom:24px;}
     .h2{font-size:30px;letter-spacing:-0.3px;}
@@ -154,8 +157,6 @@
     .vid{border-radius:8px;}
     .ours-vid{box-shadow:0 0 0 3px #ed748a;}
     .wide{width:auto;left:auto;margin-left:0;}
-    .pairs{grid-template-columns:1fr;gap:24px;}
-    .pair{gap:6px;} .pair-arrow{font-size:16px;padding-bottom:20px;}
     .results-row{gap:10px;}
     .results-row.c4,.results-row.c5{grid-template-columns:repeat(2,1fr);}
     .results-row.c5>div:first-child{grid-column:1 / -1;width:calc(50% - 5px);margin:0 auto;}
@@ -189,16 +190,17 @@
   </div>
 
   <!-- ===== Teaser ===== -->
-  <div class="teaser">
+  <div class="teaser" id="hero">
     <div>
-      <video class="vid" src="assets/davis/blackswan/input.mp4" autoplay muted loop playsinline></video>
+      <video class="vid" id="hero-in" muted loop playsinline></video>
       <div class="cap">Input video</div>
     </div>
     <div>
-      <video class="vid" src="assets/davis/blackswan/bt_ours.mp4" autoplay muted loop playsinline></video>
+      <video class="vid" id="hero-out" muted playsinline></video>
       <div class="cap">Free-viewpoint rendering</div>
     </div>
   </div>
+  <div class="thumbs" id="hero-thumbs"></div>
 
   <!-- ===== Segmentation ===== -->
   <section class="section wide">
@@ -232,56 +234,6 @@
           <button class="nav-btn" id="nvs-next" aria-label="Next scene">&#8594;</button>
         </div>
       </div>
-  </section>
-
-  <!-- ===== Free-viewpoint pairs ===== -->
-  <section class="section wide">
-    <div class="sec-head">
-      <div class="label">Results / 03</div>
-      <h2 class="h2">Free-Viewpoint Rendering</h2>
-    </div>
-    <div class="pairs">
-      <div class="pair">
-        <div><video class="vid" src="assets/ytvos/a653d5c23b/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
-        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
-        <div><video class="vid" src="assets/ytvos/a653d5c23b/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Free-viewpoint rendering</div></div>
-      </div>
-      <div class="pair">
-        <div><video class="vid" src="assets/ytvos/f14409b6a3/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
-        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
-        <div><video class="vid" src="assets/ytvos/f14409b6a3/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Free-viewpoint rendering</div></div>
-      </div>
-      <div class="pair">
-        <div><video class="vid" src="assets/ytvos/997117a654/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
-        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
-        <div><video class="vid" src="assets/ytvos/997117a654/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Free-viewpoint rendering</div></div>
-      </div>
-      <div class="pair">
-        <div><video class="vid" src="assets/ytvos/65ab7e1d98/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
-        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
-        <div><video class="vid" src="assets/ytvos/65ab7e1d98/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Free-viewpoint rendering</div></div>
-      </div>
-      <div class="pair">
-        <div><video class="vid" src="assets/ytvos/2efb07554a/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
-        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
-        <div><video class="vid" src="assets/ytvos/2efb07554a/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Free-viewpoint rendering</div></div>
-      </div>
-      <div class="pair">
-        <div><video class="vid" src="assets/ytvos/3eb39d11ab/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
-        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
-        <div><video class="vid" src="assets/ytvos/3eb39d11ab/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Free-viewpoint rendering</div></div>
-      </div>
-      <div class="pair">
-        <div><video class="vid" src="assets/ytvos/9715cc83dc/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
-        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
-        <div><video class="vid" src="assets/ytvos/9715cc83dc/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Free-viewpoint rendering</div></div>
-      </div>
-      <div class="pair">
-        <div><video class="vid" src="assets/ytvos/e4b2095f58/input.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Input video</div></div>
-        <div class="pair-arrow" aria-hidden="true">&#8594;</div>
-        <div><video class="vid" src="assets/ytvos/e4b2095f58/out.mp4" autoplay muted loop playsinline preload="metadata"></video><div class="cap">Free-viewpoint rendering</div></div>
-      </div>
-    </div>
   </section>
 
   <!-- ===== Quantitative ===== -->
@@ -329,6 +281,52 @@
 
 <script>
 (function(){
+  // ---- hero: rotates through scenes, advancing when the rendering finishes ----
+  (function(){
+    const HERO = ['a653d5c23b','f14409b6a3','997117a654','65ab7e1d98','2efb07554a','3eb39d11ab','9715cc83dc','e4b2095f58'];
+    const MIN_SECONDS = 5;   // short clips replay until they have been on screen this long
+    const box = document.getElementById('hero');
+    const vin = document.getElementById('hero-in'), vout = document.getElementById('hero-out');
+    const thumbs = document.getElementById('hero-thumbs');
+    let cur = -1, shown = 0, token = 0;
+    const btns = HERO.map((id, k) => {
+      const b = document.createElement('button');
+      b.className = 'thumb'; b.setAttribute('aria-label', 'Scene ' + (k + 1));
+      const im = document.createElement('img'); im.src = 'assets/ytvos/' + id + '/thumb.jpg'; im.alt = ''; im.loading = 'lazy';
+      b.appendChild(im); b.onclick = () => show(k);
+      thumbs.appendChild(b);
+      return b;
+    });
+    function ready(v){ return new Promise(res => {
+      if (v.readyState >= 3) return res();
+      v.addEventListener('canplay', res, { once: true });
+      v.addEventListener('error', res, { once: true });
+    }); }
+    function show(k){
+      if (k === cur) return;
+      const my = ++token, first = cur < 0;
+      cur = k; shown = 0;
+      btns.forEach((b, j) => { if (j === k) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+      if (!first) box.classList.add('is-switching');
+      setTimeout(() => {
+        if (my !== token) return;
+        const dir = 'assets/ytvos/' + HERO[k] + '/';
+        vin.src = dir + 'input.mp4'; vout.src = dir + 'out.mp4'; vin.load(); vout.load();
+        Promise.all([ready(vin), ready(vout)]).then(() => {
+          if (my !== token) return;
+          box.classList.remove('is-switching');
+          vin.play().catch(() => {}); vout.play().catch(() => {});
+        });
+      }, first ? 0 : 280);
+    }
+    vout.addEventListener('ended', () => {
+      shown += vout.duration || 0;
+      if (shown < MIN_SECONDS) { vout.currentTime = 0; vout.play().catch(() => {}); }
+      else show((cur + 1) % HERO.length);
+    });
+    show(0);
+  })();
+
   // ---- scene lists per gallery ----
   const DAVIS = ['blackswan','bmx-trees','breakdance-flare','camel','car-shadow','cows','dance-jump','dog','elephant','flamingo','gold-fish','libby','lucia','motorbike','rollerblade','stunt','tennis'];
   const GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: DAVIS.map(id => ({ id })) } ];
