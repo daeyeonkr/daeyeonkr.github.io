@@ -67,7 +67,7 @@
   .cap{font-size:clamp(18px,1.65vw,28px);line-height:1.25;color:var(--body-muted);margin-top:12px;text-align:center;text-wrap:balance;}
   .hero{margin-top:64px;display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"prev pairs next" ". dots .";column-gap:20px;align-items:center;}
   .hero .pairs{grid-area:pairs;} .hero-prev{grid-area:prev;} .hero-next{grid-area:next;} .hero-nav{grid-area:dots;}
-  .hero .nav-btn{width:48px;height:48px;font-size:32px;padding-bottom:5px;}
+  .hero .nav-btn{width:48px;height:48px;}
   .pairs{display:grid;grid-template-columns:repeat(2,1fr);gap:24px 48px;transition:opacity .3s ease;}
   .pairs.is-switching{opacity:0;}
   .pair{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;}
@@ -102,7 +102,8 @@
   .scene-bar{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:32px;flex-wrap:wrap;}
   .scene-name{font-family:var(--mono);font-size:14px;letter-spacing:0.28px;text-transform:uppercase;color:var(--slate);}
   .scene-nav{display:flex;align-items:center;gap:14px;}
-  .nav-btn{border:1px solid #ed748a;background:transparent;color:#ed748a;border-radius:9999px;width:40px;height:40px;font-size:26px;line-height:1;padding:0 0 4px;cursor:pointer;font-family:inherit;}
+  .nav-btn{border:1px solid #ed748a;background:transparent;color:#ed748a;border-radius:9999px;width:40px;height:40px;padding:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;}
+  .nav-btn svg{width:50%;height:50%;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
   .nav-btn:hover{background:#ed748a;color:#fff;}
   .dots{display:flex;gap:8px;flex-wrap:wrap;}
   .dot{border:none;background:var(--hairline);border-radius:9999px;width:9px;height:9px;padding:0;cursor:pointer;}
@@ -151,7 +152,7 @@
     .subtitle{font-size:19px;margin-top:12px;}
     .tldr{margin-top:44px;} .tldr p{font-size:19px;}
     .hero{margin-top:44px;grid-template-columns:auto 1fr auto;grid-template-areas:"pairs pairs pairs" "prev dots next";column-gap:12px;row-gap:16px;}
-    .hero .nav-btn{width:40px;height:40px;font-size:26px;padding-bottom:4px;}
+    .hero .nav-btn{width:40px;height:40px;}
     .hero-nav{margin-top:0;}
     .pairs{grid-template-columns:1fr;gap:20px;}
     .pair{gap:6px;} .pair-arrow{font-size:26px;padding-bottom:30px;}
@@ -195,9 +196,9 @@
 
   <!-- ===== Teaser: four input / rendering pairs at a time ===== -->
   <div class="hero wide">
-    <button class="nav-btn hero-prev" id="hero-prev" aria-label="Previous set">&#8249;</button>
+    <button class="nav-btn hero-prev" id="hero-prev" aria-label="Previous set"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg></button>
     <div class="pairs" id="hero"></div>
-    <button class="nav-btn hero-next" id="hero-next" aria-label="Next set">&#8250;</button>
+    <button class="nav-btn hero-next" id="hero-next" aria-label="Next set"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg></button>
     <div class="hero-nav" id="hero-dots"></div>
   </div>
 
@@ -211,9 +212,9 @@
       <div class="results-row c4" id="seg-row"></div>
       <div class="scene-bar">
         <div class="scene-nav">
-          <button class="nav-btn" id="seg-prev" aria-label="Previous scene">&#8249;</button>
+          <button class="nav-btn" id="seg-prev" aria-label="Previous scene"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg></button>
           <div class="dots" id="seg-dots"></div>
-          <button class="nav-btn" id="seg-next" aria-label="Next scene">&#8250;</button>
+          <button class="nav-btn" id="seg-next" aria-label="Next scene"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg></button>
         </div>
       </div>
   </section>
@@ -228,9 +229,9 @@
       <div class="results-row c5" id="nvs-row"></div>
       <div class="scene-bar">
         <div class="scene-nav">
-          <button class="nav-btn" id="nvs-prev" aria-label="Previous scene">&#8249;</button>
+          <button class="nav-btn" id="nvs-prev" aria-label="Previous scene"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg></button>
           <div class="dots" id="nvs-dots"></div>
-          <button class="nav-btn" id="nvs-next" aria-label="Next scene">&#8250;</button>
+          <button class="nav-btn" id="nvs-next" aria-label="Next scene"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg></button>
         </div>
       </div>
   </section>
