@@ -4,19 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GG4D</title>
-<link rel="canonical" href="https://daeyeonkr.github.io/publication/gg4d/">
+<link rel="canonical" href="https://daeyeonkr.github.io/publication/GG4D/">
 <meta name="description" content="GG4D: Geometry-Guided Dynamic Novel-View Synthesis. A feedforward framework that combines an explicit 4D point cloud with an implicit real-time renderer.">
 <meta name="author" content="Daeyeon Kim">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Daeyeon Kim">
 <meta property="og:title" content="GG4D: Geometry-Guided Dynamic Novel-View Synthesis">
 <meta property="og:description" content="A feedforward framework for dynamic novel-view synthesis that combines an explicit 4D point cloud with an implicit real-time renderer.">
-<meta property="og:url" content="https://daeyeonkr.github.io/publication/gg4d/">
-<meta property="og:image" content="https://daeyeonkr.github.io/publication/gg4d/assets/og-image.png">
+<meta property="og:url" content="https://daeyeonkr.github.io/publication/GG4D/">
+<meta property="og:image" content="https://daeyeonkr.github.io/publication/GG4D/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="GG4D: Geometry-Guided Dynamic Novel-View Synthesis">
 <meta name="twitter:description" content="A feedforward framework for dynamic novel-view synthesis that combines an explicit 4D point cloud with an implicit real-time renderer.">
-<meta name="twitter:image" content="https://daeyeonkr.github.io/publication/gg4d/assets/og-image.png">
+<meta name="twitter:image" content="https://daeyeonkr.github.io/publication/GG4D/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
@@ -64,6 +64,10 @@
   .tab{border:1px solid var(--line);background:var(--paper);color:var(--body);border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer;font-family:inherit;}
   .tab[aria-selected="true"]{background:var(--ink);color:#faf9f5;border-color:var(--ink);}
   .results-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;animation:sceneFade .45s ease-out;}
+  .results-row.c4{grid-template-columns:repeat(4,1fr);}
+  .results-row.c5{grid-template-columns:repeat(5,1fr);}
+  .wide{width:min(1120px,calc(100vw - 32px));position:relative;left:50%;margin-left:calc(min(1120px,100vw - 32px) / -2);}
+  .vid{width:100%;aspect-ratio:1/1;display:block;border-radius:10px;background:var(--paper-2);object-fit:cover;}
   .scene-nav{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:18px;}
   .nav-btn{border:1px solid var(--line);background:var(--paper);border-radius:999px;width:32px;height:32px;font-size:14px;color:var(--body);cursor:pointer;font-family:inherit;}
   .nav-btn:hover{background:#f3f1ea;}
@@ -109,6 +113,9 @@
     .btn{min-width:0;flex:1 1 0;padding:9px 8px;font-size:12.5px;gap:5px;}
     .two{grid-template-columns:1fr;}
     .results-row{gap:8px;}
+    .results-row.c4{grid-template-columns:repeat(2,1fr);}
+    .results-row.c5{grid-template-columns:repeat(2,1fr);}
+    .results-row.c5>div:first-child{grid-column:1 / -1;width:calc(50% - 4px);margin:0 auto;}
     .cap{font-size:10.5px;margin-top:4px;}
     .bibtex{padding:16px 14px;font-size:11px;}
   }
@@ -135,11 +142,11 @@
     <div class="card">
       <div class="teaser">
         <div>
-          <div class="slot">teaser<br>input video</div>
+          <video class="vid" src="assets/davis/blackswan/input.mp4" autoplay muted loop playsinline></video>
           <div class="cap">Input monocular video</div>
         </div>
         <div>
-          <div class="slot">teaser<br>GG4D output</div>
+          <video class="vid" src="assets/davis/blackswan/bt_ours.mp4" autoplay muted loop playsinline></video>
           <div class="cap">GG4D free-viewpoint rendering</div>
         </div>
       </div>
@@ -173,11 +180,7 @@
     <h3 class="h3">Dynamic Region Segmentation</h3>
     <div class="card" style="padding-bottom:26px;">
       <div class="tabs" role="tablist" id="seg-tabs"></div>
-      <div class="results-row" id="seg-row">
-        <div><div class="slot">input</div><div class="cap">Input video</div></div>
-        <div><div class="slot">baseline</div><div class="cap">Baseline</div></div>
-        <div><div class="slot">GG4D</div><div class="cap">GG4D</div></div>
-      </div>
+      <div class="results-row c4" id="seg-row"></div>
       <div class="scene-name" id="seg-name"></div>
       <div class="scene-nav">
         <button class="nav-btn" id="seg-prev" aria-label="Previous scene">&#8592;</button>
@@ -186,13 +189,9 @@
       </div>
     </div>
     <h3 class="h3" style="margin-top:44px;">Dynamic Novel-View Synthesis</h3>
-    <div class="card" style="padding-bottom:26px;">
+    <div class="card wide" style="padding-bottom:26px;">
       <div class="tabs" role="tablist" id="nvs-tabs"></div>
-      <div class="results-row" id="nvs-row">
-        <div><div class="slot">input</div><div class="cap">Input video</div></div>
-        <div><div class="slot">point cloud</div><div class="cap">4D point cloud projection</div></div>
-        <div><div class="slot">GG4D</div><div class="cap">GG4D</div></div>
-      </div>
+      <div class="results-row c5" id="nvs-row"></div>
       <div class="scene-name" id="nvs-name"></div>
       <div class="scene-nav">
         <button class="nav-btn" id="nvs-prev" aria-label="Previous scene">&#8592;</button>
@@ -262,21 +261,43 @@
 
 <script>
 (function(){
-  // ---- scene lists per gallery: fill in later ----
-  const NVS = [
-    { name: 'Pexels', scenes: [ { id: 'scene-1' }, { id: 'scene-2' }, { id: 'scene-3' } ] },
-    { name: 'DAVIS',  scenes: [ { id: 'scene-1' }, { id: 'scene-2' } ] },
+  // ---- scene lists per gallery ----
+  const DAVIS = ['blackswan','bmx-trees','breakdance-flare','camel','car-shadow','cows','dance-jump','dog','elephant','flamingo','gold-fish','libby','lucia','motorbike','rollerblade','stunt','tennis'];
+  const GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: DAVIS.map(id => ({ id })) } ];
+  // sync:true columns share one clock (restart together); sync:false columns loop on their own
+  const SEG_COLS = [
+    { file: 'input.mp4',   cap: 'Input video',               sync: true },
+    { file: 'cluster.mp4', cap: 'Clustering',                sync: true },
+    { file: 'select.mp4',  cap: 'Dynamic cluster selection', sync: true },
+    { file: 'mask.mp4',    cap: 'Refined mask',              sync: true },
   ];
-  const SEG = [
-    { name: 'DAVIS', scenes: [ { id: 'scene-1' }, { id: 'scene-2' }, { id: 'scene-3' } ] },
+  const NVS_COLS = [
+    { file: 'input.mp4',     cap: 'Input video', sync: false },
+    { file: 'bt_4dgt.mp4',   cap: '4DGT',        sync: true },
+    { file: 'bt_movies.mp4', cap: 'MoVieS',      sync: true },
+    { file: 'bt_fsm.mp4',    cap: 'FSM',         sync: true },
+    { file: 'bt_ours.mp4',   cap: 'GG4D (Ours)', sync: true },
   ];
 
-  function gallery(prefix, GROUPS){
-    let g = 0, i = 0;
+  function gallery(prefix, GROUPS, COLS){
+    let g = 0, i = 0, token = 0;
     const tabs = document.getElementById(prefix + '-tabs');
     const dots = document.getElementById(prefix + '-dots');
     const row  = document.getElementById(prefix + '-row');
     const name = document.getElementById(prefix + '-name');
+    const vids = COLS.map(c => {
+      const w = document.createElement('div');
+      const v = document.createElement('video');
+      v.className = 'vid'; v.muted = true; v.playsInline = true; v.preload = 'auto';
+      v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+      if (!c.sync) { v.loop = true; v.autoplay = true; }
+      const cap = document.createElement('div'); cap.className = 'cap'; cap.textContent = c.cap;
+      w.appendChild(v); w.appendChild(cap); row.appendChild(w);
+      return v;
+    });
+    const synced = vids.filter((_, k) => COLS[k].sync);
+    function restart(){ synced.forEach(v => { v.currentTime = 0; }); synced.forEach(v => { v.play().catch(() => {}); }); }
+    synced[0].addEventListener('ended', restart);
     function buildTabs(){
       tabs.innerHTML = '';
       if (GROUPS.length < 2) { tabs.style.display = 'none'; return; }
@@ -300,17 +321,24 @@
     }
     function render(){
       const sc = GROUPS[g].scenes[i];
+      const my = ++token;
       buildTabs(); buildDots();
       row.style.animation = 'none'; void row.offsetWidth; row.style.animation = '';
       name.textContent = GROUPS[g].name + ' / ' + sc.id;
-      // TODO: set video sources from sc here
+      vids.forEach((v, k) => { v.pause(); v.src = GROUPS[g].dir + sc.id + '/' + COLS[k].file; v.load(); });
+      // start the synced columns only once all of them can play
+      Promise.all(synced.map(v => new Promise(res => {
+        if (v.readyState >= 3) return res();
+        v.addEventListener('canplay', res, { once: true });
+        v.addEventListener('error', res, { once: true });
+      }))).then(() => { if (my === token) restart(); });
     }
     document.getElementById(prefix + '-prev').onclick = () => { const n = GROUPS[g].scenes.length; i = (i - 1 + n) % n; render(); };
     document.getElementById(prefix + '-next').onclick = () => { const n = GROUPS[g].scenes.length; i = (i + 1) % n; render(); };
     render();
   }
-  gallery('nvs', NVS);
-  gallery('seg', SEG);
+  gallery('seg', GROUPS, SEG_COLS);
+  gallery('nvs', GROUPS, NVS_COLS);
 
   // ---- bibtex copy ----
   const btn = document.getElementById('copy');
