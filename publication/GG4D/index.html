@@ -85,6 +85,7 @@
   .pairs.is-switching{opacity:0;}
   .pair{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;}
   .pair-arrow{align-self:center;font-size:40px;line-height:1;font-weight:300;color:#ed748a;padding-bottom:50px;}
+  .pair .cap{white-space:nowrap;}
   .pair.nocap .cap{display:none;} .pair.nocap .pair-arrow{padding-bottom:0;}
   .hero-nav{display:flex;justify-content:center;gap:10px;margin-top:28px;}
   .hero-nav button{border:none;padding:0;cursor:pointer;width:28px;height:6px;border-radius:9999px;background:var(--hairline);}
@@ -331,7 +332,7 @@
       const vin = video(sc.inp), vout = video(sc.out);
       const el = document.createElement('div'); el.className = 'pair'; el.style.display = 'none';
       const arrow = document.createElement('div'); arrow.className = 'pair-arrow'; arrow.setAttribute('aria-hidden', 'true'); arrow.textContent = '\u203a';
-      el.appendChild(cell(vin, 'Input video')); el.appendChild(arrow); el.appendChild(cell(vout, 'Free-viewpoint rendering'));
+      el.appendChild(cell(vin, 'Input video')); el.appendChild(arrow); el.appendChild(cell(vout, 'Free-viewpoint video'));
       box.appendChild(el);
       return { el, vids: [vin, vout] };
     });
