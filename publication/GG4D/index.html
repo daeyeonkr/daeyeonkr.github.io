@@ -36,13 +36,19 @@
   /* soft blue / pink wash behind the hero, fading into the white canvas */
   .wash{position:absolute;top:0;left:0;right:0;height:1100px;z-index:-1;overflow:hidden;pointer-events:none;
         -webkit-mask-image:linear-gradient(to bottom,#000 45%,transparent);mask-image:linear-gradient(to bottom,#000 45%,transparent);}
-  .wash i{position:absolute;display:block;border-radius:50%;filter:blur(90px);will-change:transform;}
-  .wash i:nth-child(1){width:min(900px,75vw);aspect-ratio:1;left:-12%;top:-340px;background:#72bde5;opacity:.5;animation:drift1 7s ease-in-out infinite alternate;}
-  .wash i:nth-child(2){width:min(900px,75vw);aspect-ratio:1;right:-12%;top:-320px;background:#ff98a7;opacity:.5;animation:drift2 9s ease-in-out infinite alternate;}
-  .wash i:nth-child(3){width:min(620px,55vw);aspect-ratio:1;left:32%;top:-260px;background:#6e91d3;opacity:.24;animation:drift3 11s ease-in-out infinite alternate;}
-  @keyframes drift1{from{transform:translate(0,0) scale(1);}to{transform:translate(16%,14%) scale(1.18);}}
-  @keyframes drift2{from{transform:translate(0,0) scale(1.1);}to{transform:translate(-18%,10%) scale(.92);}}
-  @keyframes drift3{from{transform:translate(-22%,0) scale(.9);}to{transform:translate(24%,22%) scale(1.25);}}
+  /* two wide gradient sheets sliding sideways at different speeds, gently heaving */
+  .wash i{position:absolute;display:block;left:-15%;right:-15%;filter:blur(70px);will-change:transform,background-position;}
+  .wash i:nth-child(1){top:-260px;height:760px;opacity:.5;
+    background:linear-gradient(100deg,#72bde5,#ff98a7,#6e91d3,#ffb5c2,#72bde5);background-size:200% 100%;
+    animation:flow1 16s linear infinite,heave1 7s ease-in-out infinite alternate;}
+  .wash i:nth-child(2){top:-120px;height:640px;opacity:.38;
+    background:linear-gradient(80deg,#ff98a7,#b0dff4,#ed748a,#72bde5,#ff98a7);background-size:300% 100%;
+    animation:flow2 23s linear infinite,heave2 9s ease-in-out infinite alternate;}
+  .wash i:nth-child(3){display:none;}
+  @keyframes flow1{from{background-position:0% 0;}to{background-position:200% 0;}}
+  @keyframes flow2{from{background-position:150% 0;}to{background-position:0% 0;}}
+  @keyframes heave1{from{transform:translateY(-40px) rotate(-3deg);}to{transform:translateY(60px) rotate(3deg);}}
+  @keyframes heave2{from{transform:translateY(50px) rotate(4deg);}to{transform:translateY(-50px) rotate(-3deg);}}
   @media (prefers-reduced-motion:reduce){.wash i{animation:none;}}
   /* full-bleed tinted surface behind a section */
   .tint::before{content:"";position:absolute;top:-64px;bottom:-64px;left:50%;width:100vw;margin-left:-50vw;z-index:-1;background:#eef3fb;}
