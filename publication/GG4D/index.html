@@ -471,8 +471,8 @@
   const GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: DAVIS.map(id => ({ id })) } ];
   // segmentation gallery: same cycle, rotated to open on gold-fish
   const SEG_START = DAVIS.indexOf('gold-fish');
-  // rallye has segmentation videos only (no baseline renders); it makes the count even so pages of two are full
-  const SEG_ORDER = DAVIS.slice(SEG_START).concat(DAVIS.slice(0, SEG_START)).concat(['rallye']);
+  const SEG_SKIP = ['motorbike'];
+  const SEG_ORDER = DAVIS.slice(SEG_START).concat(DAVIS.slice(0, SEG_START)).filter(id => !SEG_SKIP.includes(id));
   // NVS comparison gallery: hand-picked scenes first, then the rest in the usual order
   const NVS_FIRST = ['libby','stunt','tennis','car-shadow','motorbike'];
   const NVS_SKIP = ['rollerblade'];
