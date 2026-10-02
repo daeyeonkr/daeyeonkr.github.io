@@ -472,7 +472,8 @@
   // segmentation gallery: same cycle, rotated to open on gold-fish
   const SEG_START = DAVIS.indexOf('gold-fish');
   const SEG_SKIP = ['motorbike'];
-  const SEG_ORDER = DAVIS.slice(SEG_START).concat(DAVIS.slice(0, SEG_START)).filter(id => !SEG_SKIP.includes(id));
+  const SEG_FIRST = ['tennis'];   // pulled to the front; the rest keep the rotated order
+  const SEG_ORDER = SEG_FIRST.concat(DAVIS.slice(SEG_START).concat(DAVIS.slice(0, SEG_START)).filter(id => !SEG_SKIP.includes(id) && !SEG_FIRST.includes(id)));
   // NVS comparison gallery: hand-picked scenes first, then the rest in the usual order
   const NVS_FIRST = ['libby','stunt','tennis','car-shadow','motorbike'];
   const NVS_SKIP = ['rollerblade'];
