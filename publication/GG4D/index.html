@@ -154,25 +154,6 @@
     </div>
   </section>
 
-  <!-- ===== Abstract ===== -->
-  <section class="section">
-    <h2 class="h2">Abstract</h2>
-    <div class="card">
-      <p>Dynamic novel-view synthesis lets us freely explore a captured moving scene from any viewpoint, enabling free-viewpoint video and immersive VR and AR. To this end, feedforward methods synthesize novel views in a single forward pass without per-scene optimization. Among them, one line predicts explicit 3D representations such as 3D Gaussians, while another directly predicts target views from input images using a learned implicit renderer. Yet explicit methods are limited in fidelity by geometry errors and their fixed rendering process, and implicit renderers without shared 3D geometry struggle to maintain multi-view consistency.</p>
-      <p>In this paper, we present <strong>GG4D</strong>, a feedforward framework for dynamic novel-view synthesis that combines explicit scene geometry with implicit image synthesis to achieve both multi-view consistency and high rendering fidelity. First, to aggregate geometry across frames without mixing dynamic regions from different timesteps, we propose an efficient segmentation module that separates static and dynamic regions without off-the-shelf optical flow or segmentation models. Using this separation, we construct a 4D point cloud for explicit 3D representation that guides novel-view synthesis. Second, to enable high-fidelity rendering in real time, we propose <strong>Large Chunk Attentive Test-Time Training (LaCAT)</strong>, which effectively encodes input observations into a compact scene memory through attention. Our implicit renderer, built upon it, summarizes the input video once and reuses this information to synthesize high-quality novel views in real time. Extensive experiments demonstrate that GG4D achieves state-of-the-art quality and multi-view consistency on both monocular and multi-view dynamic scene benchmarks, taking a step toward immersive applications.</p>
-    </div>
-  </section>
-
-  <!-- ===== Method ===== -->
-  <section class="section">
-    <h2 class="h2">Method</h2>
-    <div class="card">
-      <img class="fig" src="assets/overview.png" alt="GG4D overview: scene construction and rendering stages">
-      <p style="margin-top:24px;">GG4D runs in two stages. In <strong>scene construction</strong>, a frozen geometric foundation model (VGGT-&Omega;) estimates depth and camera poses, our <strong>dynamic region segmentation</strong> separates static and dynamic regions from its internal features, and the resulting <strong>4D point cloud</strong> accumulates static geometry across time while keeping dynamic geometry per timestep. In parallel, the input frames are written once into a <strong>scene memory</strong> with LaCAT. In <strong>rendering</strong>, the point cloud is projected onto the target camera at the requested timestep, and the renderer reads the scene memory to synthesize the image, so the per-view cost stays nearly constant regardless of the number of input frames.</p>
-
-    </div>
-  </section>
-
   <!-- ===== Results ===== -->
   <section class="section">
     <h2 class="h2">Results</h2>
@@ -239,6 +220,15 @@
       </table>
       </div>
       <div class="tbl-note"><span class="f" style="padding:1px 6px;border-radius:4px;">best</span>&nbsp; <span class="s" style="padding:1px 6px;border-radius:4px;">second best</span>&nbsp; &ldquo;&ndash;&rdquo; denotes settings a method does not support.</div>
+    </div>
+  </section>
+
+  <!-- ===== Method ===== -->
+  <section class="section">
+    <h2 class="h2">Method</h2>
+    <div class="card">
+      <img class="fig" src="assets/overview.png" alt="GG4D overview: scene construction and rendering stages">
+
     </div>
   </section>
 
