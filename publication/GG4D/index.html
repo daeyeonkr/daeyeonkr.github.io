@@ -68,7 +68,8 @@
 
   /* dark feature band */
   .band{background:var(--deep-green);color:#fff;border-radius:22px;padding:64px 48px 48px;
-        width:min(1360px,calc(100vw - 32px));position:relative;left:50%;margin-left:calc(min(1360px,100vw - 32px) / -2);}
+        width:min(1800px,calc(100vw - 32px));position:relative;left:50%;margin-left:calc(min(1800px,100vw - 32px) / -2);}
+  .wide{width:min(1704px,calc(100vw - 64px));position:relative;left:50%;margin-left:calc(min(1704px,100vw - 64px) / -2);}
   .band .sec-head{border-top-color:rgba(255,255,255,.22);}
   .band .label{color:rgba(255,255,255,.62);}
   .band .h2{color:#fff;}
@@ -137,6 +138,7 @@
     .h2{font-size:30px;letter-spacing:-0.3px;}
     .band{padding:36px 16px 28px;border-radius:16px;}
     .vid{border-radius:8px;}
+    .wide{width:auto;left:auto;margin-left:0;}
     .results-row{gap:10px;}
     .results-row.c4,.results-row.c5{grid-template-columns:repeat(2,1fr);}
     .results-row.c5>div:first-child{grid-column:1 / -1;width:calc(50% - 5px);margin:0 auto;}
@@ -182,7 +184,7 @@
   </div>
 
   <!-- ===== Segmentation ===== -->
-  <section class="section">
+  <section class="section wide">
     <div class="sec-head">
       <div class="label">Results / 01</div>
       <h2 class="h2">Dynamic Region Segmentation</h2>
