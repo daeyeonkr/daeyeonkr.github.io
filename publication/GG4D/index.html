@@ -34,14 +34,14 @@
   html{margin:0;background:var(--canvas);}
   body{margin:0;color:var(--ink);position:relative;}
   /* soft blue / pink wash behind the hero, fading into the white canvas */
-  .wash{position:absolute;top:0;left:0;right:0;height:1100px;z-index:-1;overflow:hidden;pointer-events:none;
-        -webkit-mask-image:linear-gradient(to bottom,#000 45%,transparent);mask-image:linear-gradient(to bottom,#000 45%,transparent);}
+  .wash{position:absolute;top:0;left:0;right:0;height:780px;z-index:-1;overflow:hidden;pointer-events:none;
+        -webkit-mask-image:linear-gradient(to bottom,#000 30%,transparent);mask-image:linear-gradient(to bottom,#000 30%,transparent);}
   /* two wide gradient sheets sliding sideways at different speeds, gently heaving */
   .wash i{position:absolute;display:block;left:-15%;right:-15%;filter:blur(70px);will-change:transform,background-position;}
-  .wash i:nth-child(1){top:-260px;height:760px;opacity:.28;
+  .wash i:nth-child(1){top:-300px;height:620px;opacity:.28;
     background:linear-gradient(100deg,#72bde5,#ff98a7,#72bde5,#ff98a7,#72bde5);background-size:200% 100%;
     animation:flow1 16s linear infinite,heave1 7s ease-in-out infinite alternate;}
-  .wash i:nth-child(2){top:-120px;height:640px;opacity:.2;
+  .wash i:nth-child(2){top:-200px;height:520px;opacity:.2;
     background:linear-gradient(80deg,#ff98a7,#72bde5,#ff98a7,#72bde5,#ff98a7);background-size:300% 100%;
     animation:flow2 23s linear infinite,heave2 9s ease-in-out infinite alternate;}
   .wash i:nth-child(3){display:none;}
@@ -178,7 +178,7 @@
     .ours-vid{box-shadow:0 0 0 3px #ed748a;}
     .wide{width:auto;left:auto;margin-left:0;}
     .tint::before{top:-40px;bottom:-40px;}
-    .wash{height:760px;} .wash i{filter:blur(60px);}
+    .wash{height:560px;} .wash i{filter:blur(60px);}
     .results-row{gap:10px;}
     .results-row.c4,.results-row.c5{grid-template-columns:repeat(2,1fr);}
     .results-row.c5>div:first-child{grid-column:1 / -1;width:calc(50% - 5px);margin:0 auto;}
