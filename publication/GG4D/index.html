@@ -65,15 +65,14 @@
   .vid{width:100%;aspect-ratio:1/1;display:block;border-radius:16px;background:var(--soft-stone);object-fit:cover;}
   .ours-vid{box-shadow:0 0 0 5px #ed748a;}
   .cap{font-size:clamp(18px,1.65vw,28px);line-height:1.25;color:var(--body-muted);margin-top:12px;text-align:center;text-wrap:balance;}
-  .teaser{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:960px;margin:64px auto 0;}
-  .teaser .vid{border-radius:22px;}
-  .teaser{transition:opacity .28s ease;}
-  .teaser.is-switching{opacity:0;}
-  .thumbs{display:flex;justify-content:center;gap:12px;margin-top:28px;flex-wrap:wrap;}
-  .thumb{border:none;padding:0;background:none;cursor:pointer;width:64px;height:64px;border-radius:8px;overflow:hidden;opacity:.5;transition:opacity .2s,box-shadow .2s;}
-  .thumb img{width:100%;height:100%;display:block;object-fit:cover;}
-  .thumb:hover{opacity:.85;}
-  .thumb[aria-current="true"]{opacity:1;box-shadow:0 0 0 3px #ed748a;}
+  .hero{margin-top:64px;}
+  .pairs{display:grid;grid-template-columns:repeat(2,1fr);gap:36px 48px;transition:opacity .3s ease;}
+  .pairs.is-switching{opacity:0;}
+  .pair{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;}
+  .pair-arrow{align-self:center;font-size:22px;color:var(--slate);padding-bottom:44px;}
+  .hero-nav{display:flex;justify-content:center;gap:10px;margin-top:28px;}
+  .hero-nav button{border:none;padding:0;cursor:pointer;width:36px;height:6px;border-radius:9999px;background:var(--hairline);}
+  .hero-nav button[aria-current="true"]{background:#ed748a;}
 
   /* sections */
   .section{margin-top:128px;}
@@ -148,8 +147,9 @@
     .wordmark{font-size:96px;letter-spacing:-1.92px;}
     .subtitle{font-size:19px;margin-top:12px;}
     .tldr{margin-top:44px;} .tldr p{font-size:19px;}
-    .teaser{gap:10px;margin-top:44px;} .teaser .vid{border-radius:16px;}
-    .thumbs{gap:8px;margin-top:18px;} .thumb{width:36px;height:36px;border-radius:6px;}
+    .hero{margin-top:44px;}
+    .pairs{grid-template-columns:1fr;gap:20px;}
+    .pair{gap:6px;} .pair-arrow{font-size:16px;padding-bottom:26px;}
     .section{margin-top:80px;}
     .sec-head{margin-bottom:24px;}
     .h2{font-size:30px;letter-spacing:-0.3px;}
@@ -187,18 +187,11 @@
     <p>We propose <span class="gg">GG4D</span>, a feedforward NVS framework for dynamic scenes that combines the multi-view consistency of explicit 3D representations with the rendering fidelity of implicit image synthesis.</p>
   </div>
 
-  <!-- ===== Teaser ===== -->
-  <div class="teaser" id="hero">
-    <div>
-      <video class="vid" id="hero-in" muted loop playsinline></video>
-      <div class="cap">Input video</div>
-    </div>
-    <div>
-      <video class="vid" id="hero-out" muted playsinline></video>
-      <div class="cap">Free-viewpoint rendering</div>
-    </div>
+  <!-- ===== Teaser: four input / rendering pairs at a time ===== -->
+  <div class="hero wide">
+    <div class="pairs" id="hero"></div>
+    <div class="hero-nav" id="hero-dots"></div>
   </div>
-  <div class="thumbs" id="hero-thumbs"></div>
 
   <!-- ===== Segmentation ===== -->
   <section class="section wide">
@@ -279,49 +272,57 @@
 
 <script>
 (function(){
-  // ---- hero: rotates through scenes, advancing when the rendering finishes ----
+  // ---- hero: four input / rendering pairs at a time, alternating between two sets ----
   (function(){
     const HERO = ['a653d5c23b','f14409b6a3','997117a654','65ab7e1d98','2efb07554a','3eb39d11ab','9715cc83dc','e4b2095f58'];
-    const MIN_SECONDS = 5;   // short clips replay until they have been on screen this long
-    const box = document.getElementById('hero');
-    const vin = document.getElementById('hero-in'), vout = document.getElementById('hero-out');
-    const thumbs = document.getElementById('hero-thumbs');
-    let cur = -1, shown = 0, token = 0;
-    const btns = HERO.map((id, k) => {
-      const b = document.createElement('button');
-      b.className = 'thumb'; b.setAttribute('aria-label', 'Scene ' + (k + 1));
-      const im = document.createElement('img'); im.src = 'assets/ytvos/' + id + '/thumb.jpg'; im.alt = ''; im.loading = 'lazy';
-      b.appendChild(im); b.onclick = () => show(k);
-      thumbs.appendChild(b);
-      return b;
-    });
-    function ready(v){ return new Promise(res => {
-      if (v.readyState >= 3) return res();
-      v.addEventListener('canplay', res, { once: true });
-      v.addEventListener('error', res, { once: true });
-    }); }
-    function show(k){
-      if (k === cur) return;
-      const my = ++token, first = cur < 0;
-      cur = k; shown = 0;
-      btns.forEach((b, j) => { if (j === k) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
-      if (!first) box.classList.add('is-switching');
-      setTimeout(() => {
-        if (my !== token) return;
-        const dir = 'assets/ytvos/' + HERO[k] + '/';
-        vin.src = dir + 'input.mp4'; vout.src = dir + 'out.mp4'; vin.load(); vout.load();
-        Promise.all([ready(vin), ready(vout)]).then(() => {
-          if (my !== token) return;
-          box.classList.remove('is-switching');
-          vin.play().catch(() => {}); vout.play().catch(() => {});
-        });
-      }, first ? 0 : 280);
+    const PER_PAGE = 4, HOLD_MS = 9000;
+    const box = document.getElementById('hero'), dots = document.getElementById('hero-dots');
+    const nPages = Math.ceil(HERO.length / PER_PAGE);
+    function video(src){
+      const v = document.createElement('video');
+      v.className = 'vid'; v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
+      v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.src = src;
+      return v;
     }
-    vout.addEventListener('ended', () => {
-      shown += vout.duration || 0;
-      if (shown < MIN_SECONDS) { vout.currentTime = 0; vout.play().catch(() => {}); }
-      else show((cur + 1) % HERO.length);
+    function cell(v, text){
+      const w = document.createElement('div'), c = document.createElement('div');
+      c.className = 'cap'; c.textContent = text; w.appendChild(v); w.appendChild(c);
+      return w;
+    }
+    const pairs = HERO.map(id => {
+      const dir = 'assets/ytvos/' + id + '/';
+      const vin = video(dir + 'input.mp4'), vout = video(dir + 'out.mp4');
+      const el = document.createElement('div'); el.className = 'pair';
+      const arrow = document.createElement('div'); arrow.className = 'pair-arrow'; arrow.setAttribute('aria-hidden', 'true'); arrow.textContent = '\u2192';
+      el.appendChild(cell(vin, 'Input video')); el.appendChild(arrow); el.appendChild(cell(vout, 'Free-viewpoint rendering'));
+      box.appendChild(el);
+      return { el, vids: [vin, vout] };
     });
+    const btns = [];
+    for (let k = 0; k < nPages; k++) {
+      const b = document.createElement('button');
+      b.setAttribute('aria-label', 'Set ' + (k + 1)); b.onclick = () => show(k);
+      dots.appendChild(b); btns.push(b);
+    }
+    let page = -1, timer = null;
+    function apply(k){
+      pairs.forEach((p, j) => {
+        const on = Math.floor(j / PER_PAGE) === k;
+        p.el.style.display = on ? '' : 'none';
+        p.vids.forEach(v => { if (on) { v.currentTime = 0; v.play().catch(() => {}); } else v.pause(); });
+      });
+      btns.forEach((b, j) => { if (j === k) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    }
+    function show(k){
+      if (k === page) return;
+      const first = page < 0;
+      page = k;
+      clearTimeout(timer);
+      timer = setTimeout(() => show((page + 1) % nPages), HOLD_MS);
+      if (first) return apply(k);
+      box.classList.add('is-switching');
+      setTimeout(() => { apply(k); box.classList.remove('is-switching'); }, 300);
+    }
     show(0);
   })();
 
