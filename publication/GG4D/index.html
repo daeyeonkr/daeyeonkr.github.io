@@ -74,7 +74,7 @@
   .pair-arrow{align-self:center;font-size:22px;color:var(--slate);padding-bottom:44px;}
   .pair.nocap .cap{display:none;} .pair.nocap .pair-arrow{padding-bottom:0;}
   .hero-nav{display:flex;justify-content:center;gap:10px;margin-top:28px;}
-  .hero-nav button{border:none;padding:0;cursor:pointer;width:36px;height:6px;border-radius:9999px;background:var(--hairline);}
+  .hero-nav button{border:none;padding:0;cursor:pointer;width:28px;height:6px;border-radius:9999px;background:var(--hairline);}
   .hero-nav button[aria-current="true"]{background:#ed748a;}
 
   /* sections */
@@ -282,14 +282,19 @@
 (function(){
   // ---- hero: four input / rendering pairs at a time, paged by the side arrows ----
   (function(){
-    const HERO = ['a653d5c23b','f14409b6a3','997117a654','65ab7e1d98','2efb07554a','3eb39d11ab','9715cc83dc','e4b2095f58'];
+    const YTVOS = ['a653d5c23b','f14409b6a3','997117a654','65ab7e1d98','2efb07554a','3eb39d11ab','9715cc83dc','e4b2095f58'];
+    const DAVIS_HERO = ['blackswan','bmx-trees','breakdance-flare','camel','car-shadow','cows','dance-jump','dog','elephant','flamingo','gold-fish','libby','lucia','motorbike','rollerblade','stunt','tennis'];
+    const HERO = YTVOS.map(id => ({ inp: 'assets/ytvos/' + id + '/input.mp4', out: 'assets/ytvos/' + id + '/out.mp4' }))
+      .concat(DAVIS_HERO.map(id => ({ inp: 'assets/davis/' + id + '/input.mp4', out: 'assets/davis/' + id + '/bt_ours.mp4' })));
     const PER_PAGE = 4;
     const box = document.getElementById('hero'), dots = document.getElementById('hero-dots');
     const nPages = Math.ceil(HERO.length / PER_PAGE);
+    // the last page wraps around to the first scenes so the grid is always full
+    const members = k => Array.from({ length: PER_PAGE }, (_, i) => (k * PER_PAGE + i) % HERO.length);
     function video(src){
       const v = document.createElement('video');
-      v.className = 'vid'; v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
-      v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.src = src;
+      v.className = 'vid'; v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none';
+      v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.dataset.src = src;   // loaded when first shown
       return v;
     }
     function cell(v, text){
@@ -297,14 +302,9 @@
       c.className = 'cap'; c.textContent = text; w.appendChild(v); w.appendChild(c);
       return w;
     }
-    const pairs = HERO.map((id, j) => {
-      const dir = 'assets/ytvos/' + id + '/';
-      const vin = video(dir + 'input.mp4'), vout = video(dir + 'out.mp4');
-      const el = document.createElement('div'); el.className = 'pair';
-      // captions only under the bottom row (desktop: 2 columns) / the last pair (mobile: 1 column)
-      const pos = j % PER_PAGE;
-      if (pos < PER_PAGE - 2) el.classList.add('nocap');
-      if (pos < PER_PAGE - 1) el.classList.add('nocap-m');
+    const pairs = HERO.map(sc => {
+      const vin = video(sc.inp), vout = video(sc.out);
+      const el = document.createElement('div'); el.className = 'pair'; el.style.display = 'none';
       const arrow = document.createElement('div'); arrow.className = 'pair-arrow'; arrow.setAttribute('aria-hidden', 'true'); arrow.textContent = '\u2192';
       el.appendChild(cell(vin, 'Input video')); el.appendChild(arrow); el.appendChild(cell(vout, 'Free-viewpoint rendering'));
       box.appendChild(el);
@@ -318,10 +318,19 @@
     }
     let page = -1;
     function apply(k){
+      const on = members(k);
       pairs.forEach((p, j) => {
-        const on = Math.floor(j / PER_PAGE) === k;
-        p.el.style.display = on ? '' : 'none';
-        p.vids.forEach(v => { if (on) { v.currentTime = 0; v.play().catch(() => {}); } else v.pause(); });
+        const pos = on.indexOf(j);
+        p.el.style.display = pos < 0 ? 'none' : '';
+        if (pos < 0) { p.vids.forEach(v => v.pause()); return; }
+        p.el.style.order = pos;
+        // captions only under the bottom row (desktop: 2 columns) / the last pair (mobile: 1 column)
+        p.el.classList.toggle('nocap', pos < PER_PAGE - 2);
+        p.el.classList.toggle('nocap-m', pos < PER_PAGE - 1);
+        p.vids.forEach(v => {
+          if (!v.src) v.src = v.dataset.src; else v.currentTime = 0;
+          v.play().catch(() => {});
+        });
       });
       btns.forEach((b, j) => { if (j === k) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
     }
