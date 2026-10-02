@@ -403,10 +403,13 @@
 
   // ---- point cloud vs rendering: divider follows the pointer ----
   (function(){
-    const YT = ['a653d5c23b','f14409b6a3','65ab7e1d98','2efb07554a','3eb39d11ab'];
-    const DV = ['bmx-trees','car-shadow','dance-jump','tennis'];
-    const SCENES = YT.map(id => ({ pc: 'assets/ytvos/' + id + '/scaffold.mp4', out: 'assets/ytvos/' + id + '/out.mp4' }))
-      .concat(DV.map(id => ({ pc: 'assets/davis/' + id + '/scaffold.mp4', out: 'assets/davis/' + id + '/bt_ours.mp4' })));
+    const yt = id => ({ pc: 'assets/ytvos/' + id + '/scaffold.mp4', out: 'assets/ytvos/' + id + '/out.mp4' });
+    const dv = id => ({ pc: 'assets/davis/' + id + '/scaffold.mp4', out: 'assets/davis/' + id + '/bt_ours.mp4' });
+    const SCENES = [
+      yt('a653d5c23b'), yt('f14409b6a3'), dv('tennis'),
+      yt('2efb07554a'), yt('3eb39d11ab'), dv('bmx-trees'),
+      dv('car-shadow'), dv('dance-jump'), yt('65ab7e1d98'),
+    ];
     const PER_PAGE = 3;
     const row = document.getElementById('cmp-row'), dots = document.getElementById('cmp-dots');
     const nPages = Math.ceil(SCENES.length / PER_PAGE);
