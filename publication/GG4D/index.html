@@ -104,7 +104,7 @@
   .band .vid{background:rgba(0,0,0,.25);}
 
   /* galleries */
-  .tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+  .tabs{display:flex;justify-content:center;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
   .tab{border:1px solid var(--primary);background:transparent;color:var(--primary);border-radius:30px;padding:6px 12px;font-size:14px;font-weight:500;line-height:1.71;cursor:pointer;font-family:inherit;}
   .tab[aria-selected="true"]{background:var(--primary);color:#fff;}
   .results-row{display:grid;gap:16px;animation:sceneFade .45s ease-out;}
@@ -380,7 +380,19 @@
   const NVS_FIRST = ['libby','stunt','tennis','car-shadow','motorbike'];
   const NVS_SKIP = ['rollerblade'];
   const NVS_ORDER = NVS_FIRST.concat(DAVIS.filter(id => !NVS_FIRST.includes(id) && !NVS_SKIP.includes(id)));
-  const NVS_GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: NVS_ORDER.map(id => ({ id })) } ];
+  // multi-view: two synchronized input cameras, all five clips have the same length
+  const MV_COLS = [
+    { file: 'in0.mp4',  cap: 'Input video 1', sync: true },
+    { file: 'in1.mp4',  cap: 'Input video 2', sync: true },
+    { file: 'fsm.mp4',  cap: 'FSM',           sync: true },
+    { file: 'reon.mp4', cap: 'REON',          sync: true },
+    { file: 'ours.mp4', cap: 'GG4D (Ours)',   sync: true, ours: true },
+  ];
+  const MV = ['20250918_165029','20250918_164538','20250914_171654'];
+  const NVS_GROUPS = [
+    { name: 'Monocular',  dir: 'assets/davis/',     scenes: NVS_ORDER.map(id => ({ id })) },
+    { name: 'Multi-view', dir: 'assets/multiview/', scenes: MV.map(id => ({ id })), cols: MV_COLS },
+  ];
   const SEG_GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: SEG_ORDER.map(id => ({ id })) } ];
   // sync:true columns share one clock (restart together); sync:false columns loop on their own
   const SEG_COLS = [
@@ -406,7 +418,9 @@
     const row  = document.getElementById(prefix + '-row');
     const rows = [];
     if (CHEV) row.classList.add('chev');
+    const colsOf = () => GROUPS[g].cols || COLS;   // a group may bring its own columns (same count)
     for (let r = 0; r < ROWS; r++) {
+      const caps = [];
       const vids = COLS.map((c, ci) => {
         if (CHEV && ci > 0) {   // chevron between neighbouring steps
           const ch = document.createElement('div');
@@ -417,17 +431,15 @@
         const v = document.createElement('video');
         v.className = 'vid'; v.muted = true; v.playsInline = true; v.preload = 'auto';
         v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
-        if (!c.sync) { v.loop = true; v.autoplay = true; }
-        if (c.ours) v.classList.add('ours-vid');
         w.appendChild(v);
-        if (r === ROWS - 1) { const cap = document.createElement('div'); cap.className = 'cap'; cap.textContent = c.cap; w.appendChild(cap); }
+        if (r === ROWS - 1) { const cap = document.createElement('div'); cap.className = 'cap'; w.appendChild(cap); caps.push(cap); }
         row.appendChild(w);
         return v;
       });
-      const synced = vids.filter((_, k) => COLS[k].sync);
-      const restart = () => { synced.forEach(v => { v.currentTime = 0; }); synced.forEach(v => { v.play().catch(() => {}); }); };
-      synced[0].addEventListener('ended', restart);
-      rows.push({ vids, synced, restart });
+      const R = { vids, caps, synced: [] };
+      R.restart = () => { R.synced.forEach(v => { v.currentTime = 0; }); R.synced.forEach(v => { v.play().catch(() => {}); }); };
+      vids.forEach(v => v.addEventListener('ended', () => { if (v === R.synced[0]) R.restart(); }));
+      rows.push(R);
     }
     const nPages = () => Math.ceil(GROUPS[g].scenes.length / ROWS);
     function buildTabs(){
@@ -458,7 +470,15 @@
       row.style.animation = 'none'; void row.offsetWidth; row.style.animation = '';
       rows.forEach((R, r) => {
         const sc = scenes[(i * ROWS + r) % scenes.length];   // the last page wraps around so every row is filled
-        R.vids.forEach((v, k) => { v.pause(); v.src = GROUPS[g].dir + sc.id + '/' + COLS[k].file; v.load(); });
+        const cols = colsOf();
+        R.synced = R.vids.filter((_, k) => cols[k].sync);
+        R.caps.forEach((cap, k) => { cap.textContent = cols[k].cap; });
+        R.vids.forEach((v, k) => {
+          v.pause();
+          v.loop = !cols[k].sync; v.autoplay = !cols[k].sync;   // unsynced columns loop on their own
+          v.classList.toggle('ours-vid', !!cols[k].ours);
+          v.src = GROUPS[g].dir + sc.id + '/' + cols[k].file; v.load();
+        });
         // start a row's synced columns only once all of them can play
         Promise.all(R.synced.map(v => new Promise(res => {
           if (v.readyState >= 3) return res();
