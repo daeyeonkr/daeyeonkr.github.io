@@ -101,9 +101,10 @@
   th,td{padding:12px 8px;text-align:center;white-space:nowrap;border-bottom:1px solid var(--hairline);}
   th{font-weight:400;color:var(--slate);}
   thead tr:last-child th{font-family:var(--mono);font-size:12px;letter-spacing:0.28px;}
-  td:first-child,th:first-child{text-align:left;padding-left:0;}
+  tbody td:first-child,thead tr:first-child th:first-child{text-align:left;padding-left:0;}
   .grp{color:var(--ink);}
-  .rowhead td{font-family:var(--mono);font-size:12px;letter-spacing:0.28px;text-transform:uppercase;color:var(--slate);text-align:left;padding-top:20px;}
+  .rowhead td{font-family:var(--mono);font-size:12px;letter-spacing:0.28px;text-transform:uppercase;color:var(--slate);padding-top:20px;}
+  tbody .rowhead td:first-child{text-align:center;}
   .ours td{font-weight:500;}
   .f{background:#ffb5c2;} .s{background:#b0dff4;}
   .tbl-note{font-size:14px;color:var(--body-muted);margin-top:16px;}
