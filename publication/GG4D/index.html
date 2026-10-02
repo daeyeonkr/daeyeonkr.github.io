@@ -19,7 +19,7 @@
 <meta name="twitter:image" content="https://daeyeonkr.github.io/publication/GG4D/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
   :root{
     --primary:#17171c; --ink:#212121; --deep-green:#003c33; --canvas:#ffffff;
@@ -39,7 +39,10 @@
   /* hero */
   header{text-align:center;}
   .title{margin:0 0 32px;font-weight:400;}
-  .wordmark{display:block;font-family:var(--display);font-size:96px;line-height:1;letter-spacing:-1.92px;color:#000;}
+  .wordmark{display:block;position:relative;width:fit-content;margin:0 auto;padding:0 4px 6px;font-family:var(--display);font-size:96px;font-weight:700;line-height:1;letter-spacing:-1.92px;
+            background:linear-gradient(to right,#ff7759,#1863dc);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
+  .wordmark::before{content:"GG4D";position:absolute;inset:0;padding:0 4px 6px;background:linear-gradient(to right,#f2b825,#17a67d);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+            -webkit-mask-image:linear-gradient(to bottom,#000,transparent);mask-image:linear-gradient(to bottom,#000,transparent);pointer-events:none;}
   .subtitle{display:block;font-family:var(--ui);font-size:24px;line-height:1.3;color:var(--body-muted);margin-top:16px;}
   .authors{font-size:16px;line-height:1.5;}
   .authors a{color:var(--ink);text-decoration:none;} .authors a:hover{text-decoration:underline;}
