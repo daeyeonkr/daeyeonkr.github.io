@@ -89,7 +89,7 @@
   .results-row{display:grid;gap:16px;animation:sceneFade .45s ease-out;}
   .results-row.c4{grid-template-columns:repeat(4,1fr);}
   .results-row.c5{grid-template-columns:repeat(5,1fr);}
-  .scene-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:32px;flex-wrap:wrap;}
+  .scene-bar{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:32px;flex-wrap:wrap;}
   .scene-name{font-family:var(--mono);font-size:14px;letter-spacing:0.28px;text-transform:uppercase;color:var(--slate);}
   .scene-nav{display:flex;align-items:center;gap:14px;}
   .nav-btn{border:1px solid var(--primary);background:transparent;color:var(--primary);border-radius:9999px;width:40px;height:40px;font-size:16px;cursor:pointer;font-family:inherit;}
@@ -199,7 +199,6 @@
       <div class="tabs" role="tablist" id="seg-tabs"></div>
       <div class="results-row c4" id="seg-row"></div>
       <div class="scene-bar">
-        <div class="scene-name" id="seg-name"></div>
         <div class="scene-nav">
           <button class="nav-btn" id="seg-prev" aria-label="Previous scene">&#8592;</button>
           <div class="dots" id="seg-dots"></div>
@@ -217,7 +216,6 @@
       <div class="tabs" role="tablist" id="nvs-tabs"></div>
       <div class="results-row c5" id="nvs-row"></div>
       <div class="scene-bar">
-        <div class="scene-name" id="nvs-name"></div>
         <div class="scene-nav">
           <button class="nav-btn" id="nvs-prev" aria-label="Previous scene">&#8592;</button>
           <div class="dots" id="nvs-dots"></div>
@@ -294,7 +292,6 @@
     const tabs = document.getElementById(prefix + '-tabs');
     const dots = document.getElementById(prefix + '-dots');
     const row  = document.getElementById(prefix + '-row');
-    const name = document.getElementById(prefix + '-name');
     const vids = COLS.map(c => {
       const w = document.createElement('div');
       const v = document.createElement('video');
@@ -334,7 +331,6 @@
       const my = ++token;
       buildTabs(); buildDots();
       row.style.animation = 'none'; void row.offsetWidth; row.style.animation = '';
-      name.textContent = GROUPS[g].name + ' / ' + sc.id + '  \u00b7  ' + (i + 1) + ' of ' + GROUPS[g].scenes.length;
       vids.forEach((v, k) => { v.pause(); v.src = GROUPS[g].dir + sc.id + '/' + COLS[k].file; v.load(); });
       // start the synced columns only once all of them can play
       Promise.all(synced.map(v => new Promise(res => {
