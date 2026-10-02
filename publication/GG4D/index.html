@@ -378,7 +378,8 @@
   const SEG_ORDER = DAVIS.slice(SEG_START).concat(DAVIS.slice(0, SEG_START)).concat(['rallye']);
   // NVS comparison gallery: hand-picked scenes first, then the rest in the usual order
   const NVS_FIRST = ['libby','stunt','tennis','car-shadow','motorbike'];
-  const NVS_ORDER = NVS_FIRST.concat(DAVIS.filter(id => !NVS_FIRST.includes(id)));
+  const NVS_SKIP = ['rollerblade'];
+  const NVS_ORDER = NVS_FIRST.concat(DAVIS.filter(id => !NVS_FIRST.includes(id) && !NVS_SKIP.includes(id)));
   const NVS_GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: NVS_ORDER.map(id => ({ id })) } ];
   const SEG_GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: SEG_ORDER.map(id => ({ id })) } ];
   // sync:true columns share one clock (restart together); sync:false columns loop on their own
