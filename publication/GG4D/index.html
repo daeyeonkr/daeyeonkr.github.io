@@ -63,6 +63,7 @@
 
   /* media */
   .vid{width:100%;aspect-ratio:1/1;display:block;border-radius:16px;background:var(--soft-stone);object-fit:cover;}
+  .ours-vid{box-shadow:0 0 0 5px #ed748a;}
   .cap{font-size:clamp(18px,1.65vw,28px);line-height:1.25;color:var(--body-muted);margin-top:12px;text-align:center;text-wrap:balance;}
   .teaser{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:960px;margin:64px auto 0;}
   .teaser .vid{border-radius:22px;}
@@ -151,6 +152,7 @@
     .h2{font-size:30px;letter-spacing:-0.3px;}
     .band{padding:36px 16px 28px;border-radius:16px;}
     .vid{border-radius:8px;}
+    .ours-vid{box-shadow:0 0 0 3px #ed748a;}
     .wide{width:auto;left:auto;margin-left:0;}
     .pairs{grid-template-columns:1fr;gap:24px;}
     .pair{gap:6px;} .pair-arrow{font-size:16px;padding-bottom:20px;}
@@ -342,7 +344,7 @@
     { file: 'bt_4dgt.mp4',   cap: '4DGT',        sync: true },
     { file: 'bt_movies.mp4', cap: 'MoVieS',      sync: true },
     { file: 'bt_fsm.mp4',    cap: 'FSM',         sync: true },
-    { file: 'bt_ours.mp4',   cap: 'GG4D (Ours)', sync: true },
+    { file: 'bt_ours.mp4',   cap: 'GG4D (Ours)', sync: true, ours: true },
   ];
 
   function gallery(prefix, GROUPS, COLS){
@@ -356,6 +358,7 @@
       v.className = 'vid'; v.muted = true; v.playsInline = true; v.preload = 'auto';
       v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
       if (!c.sync) { v.loop = true; v.autoplay = true; }
+      if (c.ours) v.classList.add('ours-vid');
       const cap = document.createElement('div'); cap.className = 'cap'; cap.textContent = c.cap;
       w.appendChild(v); w.appendChild(cap); row.appendChild(w);
       return v;
