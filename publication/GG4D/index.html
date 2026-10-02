@@ -53,6 +53,12 @@
   .fig{width:100%;display:block;border-radius:10px;}
   .cap{font-size:12px;color:var(--cap);text-align:center;margin-top:6px;}
 
+  /* tl;dr */
+  .tldr{margin:44px auto 0;max-width:760px;text-align:center;}
+  .tldr-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:1.5px;color:var(--accent-dark);border:1px solid var(--line);border-radius:999px;padding:3px 12px;margin-bottom:14px;}
+  .tldr p{font-family:'Newsreader',Georgia,serif;font-size:22px;line-height:1.5;color:var(--ink);margin:0;text-wrap:balance;}
+  .tldr strong{font-weight:500;}
+
   /* teaser */
   .teaser{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;}
   .slot{width:100%;aspect-ratio:1/1;border:1.5px dashed #c9c4b8;border-radius:10px;background:var(--paper-2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cap);text-align:center;padding:12px;}
@@ -108,6 +114,8 @@
     .title{font-size:30px;letter-spacing:-0.4px;margin-bottom:18px;}
     .section{margin-top:64px;}
     .h2{font-size:24px;margin-bottom:14px;}
+    .tldr{margin-top:32px;}
+    .tldr p{font-size:18px;}
     .card{padding:16px 14px;}
     .btn-row{gap:8px;flex-wrap:nowrap;}
     .btn{min-width:0;flex:1 1 0;padding:9px 8px;font-size:12.5px;gap:5px;}
@@ -136,6 +144,12 @@
     </div>
     <div class="affil" style="margin-bottom:0;"><sup>1</sup>POSTECH</div>
   </header>
+
+  <!-- ===== TL;DR ===== -->
+  <div class="tldr">
+    <div class="tldr-tag">TL;DR</div>
+    <p>We propose <strong>GG4D</strong>, a feedforward NVS framework for dynamic scenes that combines the multi-view consistency of explicit 3D representations with the rendering fidelity of implicit image synthesis.</p>
+  </div>
 
   <!-- ===== Teaser ===== -->
   <section class="section" style="margin-top:56px;">
