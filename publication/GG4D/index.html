@@ -256,32 +256,6 @@
       <div class="tbl-note"><span class="f">best</span>&nbsp; <span class="s">second best</span>&nbsp; &ldquo;&ndash;&rdquo; denotes settings a method does not support.</div>
   </section>
 
-  <!-- ===== Method ===== -->
-  <section class="section">
-    <div class="sec-head">
-      <div class="label">Overview</div>
-      <h2 class="h2">Method</h2>
-    </div>
-    <img class="fig" src="assets/overview.png" alt="GG4D overview: scene construction and rendering stages">
-  </section>
-
-  <!-- ===== BibTeX ===== -->
-  <section class="section">
-    <div class="sec-head">
-      <div class="label">Citation</div>
-      <h2 class="h2">BibTeX</h2>
-    </div>
-    <div class="bib-wrap">
-      <button class="copy" id="copy" title="Copy BibTeX">Copy</button>
-<pre class="bibtex" id="bib">@article{gg4d2026,
-  title   = {GG4D: Geometry-Guided Dynamic Novel-View Synthesis},
-  author  = {TODO},
-  journal = {arXiv preprint},
-  year    = {2026}
-}</pre>
-    </div>
-  </section>
-
   <div class="foot">Project page template shared with <a href="https://daeyeonkr.github.io/publication/reon-nvs/">REON-NVS</a>.</div>
 </div>
 
@@ -365,14 +339,6 @@
   }
   gallery('seg', GROUPS, SEG_COLS);
   gallery('nvs', GROUPS, NVS_COLS);
-
-  // ---- bibtex copy ----
-  const btn = document.getElementById('copy');
-  btn.onclick = () => {
-    const text = document.getElementById('bib').textContent;
-    const ok = () => { btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = 'Copy'; }, 1600); };
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, ok); else ok();
-  };
 })();
 </script>
 </body>
