@@ -75,6 +75,7 @@
   /* media */
   .vid{width:100%;aspect-ratio:1/1;display:block;border-radius:16px;background:var(--soft-stone);object-fit:cover;}
   .ours-vid{box-shadow:0 0 0 5px #ed748a;}
+  .input-vid{box-shadow:0 0 0 5px #72bde5;}
   .cap{font-size:clamp(18px,1.65vw,28px);line-height:1.25;color:var(--body-muted);margin-top:12px;text-align:center;text-wrap:balance;}
   .hero{margin-top:64px;display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"prev pairs next" ". dots .";column-gap:20px;align-items:center;}
   .hero .pairs{grid-area:pairs;} .hero-prev{grid-area:prev;} .hero-next{grid-area:next;} .hero-nav{grid-area:dots;}
@@ -177,6 +178,7 @@
     .band{padding:36px 16px 28px;border-radius:16px;}
     .vid{border-radius:8px;}
     .ours-vid{box-shadow:0 0 0 3px #ed748a;}
+    .input-vid{box-shadow:0 0 0 3px #72bde5;}
     .wide{width:auto;left:auto;margin-left:0;}
     .results-row{gap:10px;}
     .results-row.c4,.results-row.c5,.results-row.c4.chev{grid-template-columns:repeat(2,1fr);column-gap:10px;}
@@ -382,8 +384,8 @@
   const NVS_ORDER = NVS_FIRST.concat(DAVIS.filter(id => !NVS_FIRST.includes(id) && !NVS_SKIP.includes(id)));
   // multi-view: two synchronized input cameras, all five clips have the same length
   const MV_COLS = [
-    { file: 'in0.mp4',  cap: 'Input video 1', sync: true },
-    { file: 'in1.mp4',  cap: 'Input video 2', sync: true },
+    { file: 'in0.mp4',  cap: 'Input video 1', sync: true, inp: true },
+    { file: 'in1.mp4',  cap: 'Input video 2', sync: true, inp: true },
     { file: 'fsm.mp4',  cap: 'FSM',           sync: true },
     { file: 'reon.mp4', cap: 'REON',          sync: true },
     { file: 'ours.mp4', cap: 'GG4D (Ours)',   sync: true, ours: true },
@@ -402,7 +404,7 @@
     { file: 'mask.mp4',    cap: 'Refined mask',              sync: true },
   ];
   const NVS_COLS = [
-    { file: 'input.mp4',     cap: 'Input video', sync: false },
+    { file: 'input.mp4',     cap: 'Input video', sync: false, inp: true },
     { file: 'bt_4dgt.mp4',   cap: '4DGT',        sync: true },
     { file: 'bt_movies.mp4', cap: 'MoVieS',      sync: true },
     { file: 'bt_fsm.mp4',    cap: 'FSM',         sync: true },
@@ -477,6 +479,7 @@
           v.pause();
           v.loop = !cols[k].sync; v.autoplay = !cols[k].sync;   // unsynced columns loop on their own
           v.classList.toggle('ours-vid', !!cols[k].ours);
+          v.classList.toggle('input-vid', !!cols[k].inp);
           v.src = GROUPS[g].dir + sc.id + '/' + cols[k].file; v.load();
         });
         // start a row's synced columns only once all of them can play
