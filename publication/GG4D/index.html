@@ -197,6 +197,7 @@
     .results-row{gap:10px;}
     .results-row.c4,.results-row.c5,.results-row.c4.chev{grid-template-columns:repeat(2,1fr);column-gap:10px;}
     .results-row .pair-arrow{display:none;}
+    .results-row .row-upper{display:none;}
     .results-row.c5>div:first-child{grid-column:1 / -1;width:calc(50% - 5px);margin:0 auto;}
     .cap{font-size:15px;margin-top:6px;}
     .scene-bar{justify-content:center;}
@@ -527,7 +528,7 @@
       const vids = COLS.map((c, ci) => {
         if (CHEV && ci > 0) {   // chevron between neighbouring steps
           const ch = document.createElement('div');
-          ch.className = 'pair-arrow' + (r === ROWS - 1 ? '' : ' flat'); ch.setAttribute('aria-hidden', 'true'); ch.textContent = '\u203a';
+          ch.className = 'pair-arrow' + (r === ROWS - 1 ? '' : ' flat row-upper'); ch.setAttribute('aria-hidden', 'true'); ch.textContent = '\u203a';
           row.appendChild(ch);
         }
         const w = document.createElement('div');
@@ -536,6 +537,7 @@
         v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
         w.appendChild(v);
         if (r === ROWS - 1) { const cap = document.createElement('div'); cap.className = 'cap'; w.appendChild(cap); caps.push(cap); }
+        else w.className = 'row-upper';   // hidden on phones, where one scene is shown at a time
         row.appendChild(w);
         return v;
       });
@@ -544,7 +546,10 @@
       vids.forEach(v => v.addEventListener('ended', () => { if (v === R.synced[0]) R.restart(); }));
       rows.push(R);
     }
-    const nPages = () => Math.ceil(GROUPS[g].scenes.length / ROWS);
+    // phones show only the captioned (last) row, i.e. one scene per page
+    const mq = window.matchMedia('(max-width:768px)');
+    const rowsNow = () => mq.matches ? 1 : ROWS;
+    const nPages = () => Math.ceil(GROUPS[g].scenes.length / rowsNow());
     function buildTabs(){
       tabs.innerHTML = '';
       if (GROUPS.length < 2) { tabs.style.display = 'none'; return; }
@@ -571,8 +576,10 @@
       const my = ++token;
       buildTabs(); buildDots();
       row.style.animation = 'none'; void row.offsetWidth; row.style.animation = '';
+      const rn = rowsNow(), skip = ROWS - rn;   // upper rows left empty on phones
       rows.forEach((R, r) => {
-        const sc = scenes[(i * ROWS + r) % scenes.length];   // the last page wraps around so every row is filled
+        if (r < skip) { R.vids.forEach(v => { v.pause(); v.removeAttribute('src'); v.load(); }); return; }
+        const sc = scenes[(i * rn + r - skip) % scenes.length];   // the last page wraps around so every row is filled
         const cols = colsOf();
         R.synced = R.vids.filter((_, k) => cols[k].sync);
         R.caps.forEach((cap, k) => { cap.textContent = cols[k].cap; });
@@ -591,6 +598,9 @@
         }))).then(() => { if (my === token) R.restart(); });
       });
     }
+    if (ROWS > 1) mq.addEventListener('change', e => {   // keep the first visible scene when the layout switches
+      i = e.matches ? i * ROWS : Math.floor(i / ROWS); render();
+    });
     document.getElementById(prefix + '-prev').onclick = () => { const n = nPages(); i = (i - 1 + n) % n; render(); };
     document.getElementById(prefix + '-next').onclick = () => { const n = nPages(); i = (i + 1) % n; render(); };
     render();
