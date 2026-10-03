@@ -207,6 +207,8 @@
     .results-row .pair-arrow{display:none;}
     .results-row .row-upper{display:none;}
     .results-row.c5>div:first-child{grid-column:1 / -1;width:calc(50% - 5px);margin:0 auto;}
+    .results-row.c5.mv>div:first-child{grid-column:auto;width:auto;margin:0;}
+    .results-row.c5.mv>div:last-child{grid-column:1 / -1;width:calc(50% - 5px);margin:0 auto;}
     .cap{font-size:15px;margin-top:6px;}
     .scene-bar{justify-content:center;}
     .bibtex{font-size:12px;padding:44px 16px 16px;}
@@ -521,7 +523,7 @@
               'flame_salmon','20250914_171654','flame_steak','sear_steak'];
   const NVS_GROUPS = [
     { name: 'Monocular',  dir: 'assets/davis/',     scenes: NVS_ORDER.map(id => ({ id })) },
-    { name: 'Multi-view', dir: 'assets/multiview/', scenes: MV.map(id => ({ id })), cols: MV_COLS },
+    { name: 'Multi-view', dir: 'assets/multiview/', scenes: MV.map(id => ({ id })), cols: MV_COLS, layout: 'mv' },
   ];
   const SEG_GROUPS = [ { name: 'DAVIS', dir: 'assets/davis/', scenes: SEG_ORDER.map(id => ({ id })) } ];
   // sync:true columns share one clock (restart together); sync:false columns loop on their own
@@ -602,6 +604,7 @@
       const my = ++token;
       buildTabs(); buildDots();
       row.style.animation = 'none'; void row.offsetWidth; row.style.animation = '';
+      row.classList.toggle('mv', GROUPS[g].layout === 'mv');   // phone layout: both inputs share the top line
       const rn = rowsNow(), skip = ROWS - rn;   // upper rows left empty on phones
       rows.forEach((R, r) => {
         if (r < skip) { R.vids.forEach(v => { v.pause(); v.removeAttribute('src'); v.load(); }); return; }
