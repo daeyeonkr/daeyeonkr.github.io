@@ -396,6 +396,20 @@
       }
     }
     buildDots();
+    // first show: attach the source and load it explicitly, then play once a frame is decoded.
+    // (Setting src on a preload="none" video and calling play() right away leaves some browsers,
+    //  iOS Safari in particular, with a blank element until the next interaction.)
+    function start(v){
+      const go = () => v.play().catch(() => {});
+      if (!v.getAttribute('src')) {
+        v.preload = 'auto'; v.src = v.dataset.src; v.load();
+        v.addEventListener('loadeddata', go, { once: true });
+        v.addEventListener('canplay', go, { once: true });
+        return;
+      }
+      if (v.readyState >= 2) v.currentTime = 0;
+      go();
+    }
     let page = -1;
     function apply(k){
       const on = members(k);
@@ -407,10 +421,7 @@
         // captions only above the top row (desktop: 2 columns) / the first pair (phones: 1 column)
         p.el.classList.toggle('cap-d', pos < 2);    // top row of the 2-column desktop grid
         p.el.classList.toggle('cap-m', pos === 0);  // first pair of the 1-column phone layout
-        p.vids.forEach(v => {
-          if (!v.src) v.src = v.dataset.src; else v.currentTime = 0;
-          v.play().catch(() => {});
-        });
+        p.vids.forEach(start);
       });
       btns.forEach((b, j) => { if (j === k) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
     }
