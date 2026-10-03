@@ -426,9 +426,11 @@
       yt('2efb07554a'), yt('3eb39d11ab'), dv('bmx-trees'),
       dv('car-shadow'), dv('dance-jump'), yt('65ab7e1d98'),
     ];
-    const PER_PAGE = 3;
+    const PER_PAGE = 3;   // cells built; phones show just the first one
+    const mq = window.matchMedia('(max-width:768px)');
+    const perPage = () => mq.matches ? 1 : PER_PAGE;
     const row = document.getElementById('cmp-row'), dots = document.getElementById('cmp-dots');
-    const nPages = Math.ceil(SCENES.length / PER_PAGE);
+    const nPages = () => Math.ceil(SCENES.length / perPage());
     function video(cls){
       const v = document.createElement('video');
       v.muted = true; v.playsInline = true; v.preload = 'auto'; if (cls) v.className = cls;
@@ -460,7 +462,7 @@
     function render(){
       const my = ++token;
       dots.innerHTML = '';
-      for (let k = 0; k < nPages; k++) {
+      for (let k = 0; k < nPages(); k++) {
         const d = document.createElement('button');
         d.className = 'dot'; d.setAttribute('aria-label', 'Page ' + (k + 1));
         if (k === page) d.setAttribute('aria-current', 'true');
@@ -468,8 +470,11 @@
         dots.appendChild(d);
       }
       row.style.animation = 'none'; void row.offsetWidth; row.style.animation = '';
+      const pp = perPage();
       cells.forEach((c, j) => {
-        const sc = SCENES[(page * PER_PAGE + j) % SCENES.length];   // last page wraps so every cell is filled
+        c.el.style.display = j < pp ? '' : 'none';
+        if (j >= pp) { [c.out, c.pc].forEach(v => { v.pause(); v.removeAttribute('src'); v.load(); }); return; }
+        const sc = SCENES[(page * pp + j) % SCENES.length];   // last page wraps so every cell is filled
         c.el.style.setProperty('--x', '50%');
         [c.out, c.pc].forEach(v => v.pause());
         c.out.src = sc.out; c.pc.src = sc.pc; c.out.load(); c.pc.load();
@@ -480,8 +485,11 @@
         }))).then(() => { if (my === token) c.restart(); });
       });
     }
-    document.getElementById('cmp-prev').onclick = () => { page = (page - 1 + nPages) % nPages; render(); };
-    document.getElementById('cmp-next').onclick = () => { page = (page + 1) % nPages; render(); };
+    mq.addEventListener('change', e => {   // keep the first visible scene when the layout switches
+      page = e.matches ? page * PER_PAGE : Math.floor(page / PER_PAGE); render();
+    });
+    document.getElementById('cmp-prev').onclick = () => { const n = nPages(); page = (page - 1 + n) % n; render(); };
+    document.getElementById('cmp-next').onclick = () => { const n = nPages(); page = (page + 1) % n; render(); };
     render();
   })();
 
