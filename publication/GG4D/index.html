@@ -345,6 +345,18 @@
 
 <script>
 (function(){
+  // iOS in Low Power Mode (and some data-saver settings) refuses autoplay until the user touches the page;
+  // play() is then rejected silently and every video sits on its first frame. On the first touch or click
+  // anywhere, start every visible video that is still paused. Untouched clips are all at time 0, so rows stay in sync.
+  (function(){
+    const kick = () => {
+      document.querySelectorAll('video').forEach(v => {
+        if (v.getAttribute('src') && v.paused && v.offsetParent !== null) v.play().catch(() => {});
+      });
+    };
+    ['touchend', 'pointerup', 'click', 'keydown'].forEach(t => document.addEventListener(t, kick, { passive: true }));
+  })();
+
   // Load a set of clips and start them together. play() is called right away because some browsers
   // (iOS Safari) do not fetch a video, and so never fire canplay, until play() has been requested;
   // once every clip has data (or after a timeout) they are rewound and restarted in sync.
