@@ -345,6 +345,15 @@
 
 <script>
 (function(){
+  // run fn once, when el comes within ~one screen of the viewport (sections below the hero load lazily)
+  function whenNear(el, fn){
+    if (!('IntersectionObserver' in window)) return fn();
+    const io = new IntersectionObserver(es => {
+      if (es.some(e => e.isIntersecting)) { io.disconnect(); fn(); }
+    }, { rootMargin: '600px 0px' });
+    io.observe(el);
+  }
+
   // ---- hero: four input / rendering pairs at a time, paged by the side arrows ----
   (function(){
     const YTVOS = ['a653d5c23b','f14409b6a3','997117a654','65ab7e1d98','2efb07554a','3eb39d11ab','e4b2095f58'];
@@ -495,7 +504,7 @@
     });
     document.getElementById('cmp-prev').onclick = () => { const n = nPages(); page = (page - 1 + n) % n; render(); };
     document.getElementById('cmp-next').onclick = () => { const n = nPages(); page = (page + 1) % n; render(); };
-    render();
+    whenNear(row, render);   // first load only once the section is about to scroll into view
   })();
 
   // ---- scene lists per gallery ----
@@ -632,7 +641,7 @@
     });
     document.getElementById(prefix + '-prev').onclick = () => { const n = nPages(); i = (i - 1 + n) % n; render(); };
     document.getElementById(prefix + '-next').onclick = () => { const n = nPages(); i = (i + 1) % n; render(); };
-    render();
+    whenNear(row, render);
   }
   gallery('seg', SEG_GROUPS, SEG_COLS, 2, true);
   gallery('nvs', NVS_GROUPS, NVS_COLS);
