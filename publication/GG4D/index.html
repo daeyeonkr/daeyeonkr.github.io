@@ -91,8 +91,8 @@
   .pair .cap{white-space:nowrap;margin:0 0 12px;display:none;}
   .pair.cap-d .cap{display:block;}
   .pair.cap-d .pair-arrow{padding-top:calc(clamp(18px,1.65vw,28px) * 1.25 + 12px);}
-  .hero-nav{display:flex;justify-content:center;gap:10px;margin-top:28px;}
-  .hero-nav button{border:none;padding:0;cursor:pointer;width:28px;height:6px;border-radius:9999px;background:var(--hairline);}
+  .hero-nav{display:flex;justify-content:center;gap:10px;margin-top:28px;flex-wrap:nowrap;min-width:0;}
+  .hero-nav button{border:none;padding:0;cursor:pointer;width:28px;flex:0 1 28px;min-width:8px;height:6px;border-radius:9999px;background:var(--hairline);}
   .hero-nav button[aria-current="true"]{background:#ed748a;}
 
   /* sections */
@@ -125,8 +125,9 @@
   .nav-btn{border:2.5px solid #6e91d3;background:#6e91d3;color:#fff;transition:background .15s,border-color .15s;border-radius:9999px;width:40px;height:40px;padding:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;}
   .nav-btn svg{width:50%;height:50%;display:block;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;}
   .nav-btn:hover{background:#5478c2;border-color:#5478c2;color:#fff;}
-  .dots{display:flex;gap:8px;flex-wrap:wrap;}
-  .dot{border:none;background:var(--hairline);border-radius:9999px;width:9px;height:9px;padding:0;cursor:pointer;}
+  /* page dots stay on one line: they shrink instead of wrapping */
+  .dots{display:flex;gap:8px;flex-wrap:nowrap;min-width:0;}
+  .dot{border:none;background:var(--hairline);border-radius:9999px;width:9px;height:9px;padding:0;cursor:pointer;flex:0 1 9px;min-width:4px;}
   .dot[aria-current="true"]{background:var(--primary);}
   .band .scene-name{color:rgba(255,255,255,.62);}
   .band .nav-btn{border-color:#fff;color:#fff;} .band .nav-btn:hover{background:#fff;color:var(--deep-green);}
@@ -185,7 +186,9 @@
     .stats{gap:40px;margin-top:36px;} .stat-num{font-size:40px;} .stat-label{font-size:14px;margin-top:4px;}
     .hero{margin-top:44px;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"pairs pairs pairs" "prev dots next";column-gap:12px;row-gap:16px;}
     .hero .nav-btn{width:40px;height:40px;margin-top:0;}
-    .hero-nav{margin-top:0;}
+    .hero-nav{margin-top:0;gap:6px;}
+    .dots{gap:6px;} .dot{width:7px;height:7px;flex-basis:7px;}
+    .scene-nav{gap:10px;}
     .pairs{grid-template-columns:1fr;gap:20px;}
     .pair{gap:6px;} .pair-arrow{font-size:26px;}
     .pair.cap-d .cap{display:none;} .pair.cap-d .pair-arrow{padding-top:0;}
