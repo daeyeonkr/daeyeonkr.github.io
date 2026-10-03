@@ -77,8 +77,9 @@
   .ours-vid{box-shadow:0 0 0 5px #ed748a;}
   .input-vid{box-shadow:0 0 0 5px #72bde5;}
   .cap{font-size:clamp(18px,1.65vw,28px);line-height:1.25;color:var(--body-muted);margin-top:12px;text-align:center;text-wrap:balance;}
-  .hero{margin-top:64px;display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"prev pairs next" ". dots .";column-gap:20px;align-items:center;}
-  .hero .pairs{grid-area:pairs;} .hero-prev{grid-area:prev;} .hero-next{grid-area:next;} .hero-nav{grid-area:dots;}
+  .hero{margin-top:64px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"prev pairs next" ". dots .";column-gap:20px;align-items:center;}
+  .hero .pairs{grid-area:pairs;min-width:0;}
+  .pairs>*,.pair>*,.results-row>*,.cmp-row>*{min-width:0;} .hero-prev{grid-area:prev;} .hero-next{grid-area:next;} .hero-nav{grid-area:dots;}
   /* centre the side buttons on the two video rows, not on the block including the caption line below them */
   .hero .nav-btn{width:48px;height:48px;margin-bottom:calc(clamp(18px,1.65vw,28px) * 1.25 + 12px);}
   .pairs{display:grid;grid-template-columns:repeat(2,1fr);gap:24px 48px;transition:opacity .3s ease;}
@@ -179,12 +180,11 @@
     .subtitle{font-size:19px;margin-top:12px;}
     .tldr{margin-top:44px;} .tldr p{font-size:19px;}
     .stats{gap:40px;margin-top:36px;} .stat-num{font-size:40px;} .stat-label{font-size:14px;margin-top:4px;}
-    .hero{margin-top:44px;grid-template-columns:auto 1fr auto;grid-template-areas:"pairs pairs pairs" "prev dots next";column-gap:12px;row-gap:16px;}
+    .hero{margin-top:44px;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"pairs pairs pairs" "prev dots next";column-gap:12px;row-gap:16px;}
     .hero .nav-btn{width:40px;height:40px;margin-bottom:0;}
     .hero-nav{margin-top:0;}
     .pairs{grid-template-columns:1fr;gap:20px;}
-    /* same cell width as the 2-column result grids below: no chevron column, same 10px gap */
-    .pair{grid-template-columns:1fr 1fr;gap:10px;} .pair .pair-arrow{display:none;}
+    .pair{gap:6px;} .pair-arrow{font-size:26px;padding-bottom:30px;}
     .pair.nocap-m .cap{display:none;} .pair.nocap-m .pair-arrow{padding-bottom:0;}
     .section{margin-top:80px;}
     .sec-head{margin-bottom:24px;}
