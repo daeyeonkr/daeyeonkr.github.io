@@ -183,7 +183,8 @@
     .hero .nav-btn{width:40px;height:40px;margin-bottom:0;}
     .hero-nav{margin-top:0;}
     .pairs{grid-template-columns:1fr;gap:20px;}
-    .pair{gap:6px;} .pair-arrow{font-size:26px;padding-bottom:30px;}
+    /* same cell width as the 2-column result grids below: no chevron column, same 10px gap */
+    .pair{grid-template-columns:1fr 1fr;gap:10px;} .pair .pair-arrow{display:none;}
     .pair.nocap-m .cap{display:none;} .pair.nocap-m .pair-arrow{padding-bottom:0;}
     .section{margin-top:80px;}
     .sec-head{margin-bottom:24px;}
