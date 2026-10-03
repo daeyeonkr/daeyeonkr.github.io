@@ -341,11 +341,13 @@
     const DAVIS_HERO = ['blackswan','bmx-trees','breakdance-flare','camel','car-shadow','cows','dance-jump','dog','elephant','flamingo','gold-fish','libby','lucia','motorbike','rollerblade','stunt','tennis'];
     const HERO = YTVOS.map(id => ({ inp: 'assets/ytvos/' + id + '/input.mp4', out: 'assets/ytvos/' + id + '/out.mp4' }))
       .concat(DAVIS_HERO.map(id => ({ inp: 'assets/davis/' + id + '/input.mp4', out: 'assets/davis/' + id + '/bt_ours.mp4' })));
-    const PER_PAGE = 4;
+    // four pairs per set on wide screens, two on phones
+    const mq = window.matchMedia('(max-width:768px)');
+    const perPage = () => mq.matches ? 2 : 4;
     const box = document.getElementById('hero'), dots = document.getElementById('hero-dots');
-    const nPages = Math.ceil(HERO.length / PER_PAGE);
+    const nPages = () => Math.ceil(HERO.length / perPage());
     // the last page wraps around to the first scenes so the grid is always full
-    const members = k => Array.from({ length: PER_PAGE }, (_, i) => (k * PER_PAGE + i) % HERO.length);
+    const members = k => Array.from({ length: perPage() }, (_, i) => (k * perPage() + i) % HERO.length);
     function video(src){
       const v = document.createElement('video');
       v.className = 'vid'; v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none';
@@ -365,12 +367,16 @@
       box.appendChild(el);
       return { el, vids: [vin, vout] };
     });
-    const btns = [];
-    for (let k = 0; k < nPages; k++) {
-      const b = document.createElement('button');
-      b.setAttribute('aria-label', 'Set ' + (k + 1)); b.onclick = () => show(k);
-      dots.appendChild(b); btns.push(b);
+    let btns = [];
+    function buildDots(){
+      dots.innerHTML = ''; btns = [];
+      for (let k = 0; k < nPages(); k++) {
+        const b = document.createElement('button');
+        b.setAttribute('aria-label', 'Set ' + (k + 1)); b.onclick = () => show(k);
+        dots.appendChild(b); btns.push(b);
+      }
     }
+    buildDots();
     let page = -1;
     function apply(k){
       const on = members(k);
@@ -380,8 +386,8 @@
         if (pos < 0) { p.vids.forEach(v => v.pause()); return; }
         p.el.style.order = pos;
         // captions only under the bottom row (desktop: 2 columns) / the last pair (mobile: 1 column)
-        p.el.classList.toggle('nocap', pos < PER_PAGE - 2);
-        p.el.classList.toggle('nocap-m', pos < PER_PAGE - 1);
+        p.el.classList.toggle('nocap', pos < perPage() - 2);
+        p.el.classList.toggle('nocap-m', pos < perPage() - 1);
         p.vids.forEach(v => {
           if (!v.src) v.src = v.dataset.src; else v.currentTime = 0;
           v.play().catch(() => {});
@@ -397,8 +403,12 @@
       box.classList.add('is-switching');
       setTimeout(() => { apply(k); box.classList.remove('is-switching'); }, 300);
     }
-    document.getElementById('hero-prev').onclick = () => show((page - 1 + nPages) % nPages);
-    document.getElementById('hero-next').onclick = () => show((page + 1) % nPages);
+    mq.addEventListener('change', e => {   // keep the first visible pair when the layout switches
+      const first = page * (e.matches ? 4 : 2);
+      buildDots(); const k = Math.floor(first / perPage()); page = -1; show(k);
+    });
+    document.getElementById('hero-prev').onclick = () => show((page - 1 + nPages()) % nPages());
+    document.getElementById('hero-next').onclick = () => show((page + 1) % nPages());
     show(0);
   })();
 
