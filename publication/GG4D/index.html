@@ -614,8 +614,13 @@
         row.appendChild(w);
         return v;
       });
-      const R = { vids, caps, synced: [] };
-      R.restart = () => { R.synced.forEach(v => { v.currentTime = 0; }); R.synced.forEach(v => { v.play().catch(() => {}); }); };
+      const R = { vids, caps, synced: [], follow: [] };
+      // followers (the looping input, half the length of the results) are rewound with the synced clips,
+      // so they loop exactly twice per result cycle and start on the same beat
+      R.restart = () => {
+        const all = R.synced.concat(R.follow);
+        all.forEach(v => { v.currentTime = 0; }); all.forEach(v => { v.play().catch(() => {}); });
+      };
       vids.forEach(v => v.addEventListener('ended', () => { if (v === R.synced[0]) R.restart(); }));
       rows.push(R);
     }
@@ -664,9 +669,9 @@
           v.classList.toggle('input-vid', !!cols[k].inp);
           v.src = GROUPS[g].dir + sc.id + '/' + cols[k].file;
         });
-        // unsynced columns just loop; synced ones are started together
-        R.vids.filter((_, k) => !cols[k].sync).forEach(v => { v.load(); v.play().catch(() => {}); });
-        startTogether(R.synced, () => my === token, R.restart);
+        // unsynced columns loop on their own but are rewound with the synced ones
+        R.follow = R.vids.filter((_, k) => !cols[k].sync);
+        startTogether(R.synced.concat(R.follow), () => my === token, R.restart);
       });
     }
     if (ROWS > 1) mq.addEventListener('change', e => {   // keep the first visible scene when the layout switches
