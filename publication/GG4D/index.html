@@ -22,7 +22,7 @@
 <meta name="twitter:image" content="https://daeyeonkr.github.io/publication/GG4D/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
   :root{
     --primary:#17171c; --ink:#212121; --deep-green:#003c33; --canvas:#ffffff;
@@ -48,7 +48,7 @@
             -webkit-mask-image:linear-gradient(to bottom,#000,transparent);mask-image:linear-gradient(to bottom,#000,transparent);pointer-events:none;}
   /* the title gradient drifts sideways; the two layers move at different speeds and directions */
   @keyframes gg-flow{from{background-position:0% 0;}to{background-position:200% 0;}}
-  @media (prefers-reduced-motion:reduce){.sec-head .label,.wordmark,.wordmark::before,.subtitle,.gg,.gg::before,.stat-num,.stat-num::before{animation:none;}}
+  @media (prefers-reduced-motion:reduce){.wordmark,.wordmark::before,.subtitle,.gg,.gg::before,.stat-num,.stat-num::before{animation:none;}}
   /* subtitle shares the title's flowing gradient (single layer: the text wraps on phones, so no overlay copy) */
   .subtitle{display:block;width:fit-content;margin:16px auto 0;font-family:var(--ui);font-size:32px;font-weight:500;line-height:1.25;
             background:linear-gradient(to right,#6e91d3,#ed748a,#6e91d3);background-size:200% 100%;animation:gg-flow 7s linear infinite;
@@ -60,10 +60,6 @@
   .affil{font-size:14px;line-height:1.4;color:var(--muted);margin-top:6px;}
 
   .label{font-family:var(--mono);font-size:14px;line-height:1.4;letter-spacing:0.28px;text-transform:uppercase;color:var(--slate);}
-  /* section labels (RESULTS / 01 ...): bold, with the same flowing gradient as the title */
-  .sec-head .label{display:inline-block;font-size:16px;font-weight:700;letter-spacing:0.6px;
-            background:linear-gradient(to right,#6e91d3,#ed748a,#6e91d3);background-size:200% 100%;animation:gg-flow 7s linear infinite;
-            -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
   .label.coral{color:var(--coral);}
   .tldr{max-width:860px;margin:56px auto 0;text-align:center;}
   .tldr-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--ui);font-size:22px;font-weight:700;line-height:1.3;color:var(--primary);}
