@@ -125,6 +125,10 @@
   .step-chev svg{display:block;width:16px;height:32px;fill:none;stroke:#ed748a;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
   /* bottom row has captions under the videos: centre on the video, not on video + caption */
   .step-chev.capped{padding-bottom:calc(clamp(18px,1.65vw,28px) * 1.25 + 12px);}
+  /* captions above the videos (segmentation): same size as the teaser captions */
+  .cap-top .cap{font-size:clamp(16px,1.35vw,23px);margin:0 0 12px;white-space:nowrap;}
+  .cap-top .cap:not(.cap-first){display:none;}
+  .step-chev.capped-top{padding-top:calc(clamp(16px,1.35vw,23px) * 1.25 + 12px);}
   .scene-bar{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:32px;flex-wrap:wrap;}
   .scene-name{font-family:var(--mono);font-size:14px;letter-spacing:0.28px;text-transform:uppercase;color:var(--slate);}
   .scene-nav{display:flex;align-items:center;gap:14px;}
@@ -212,6 +216,8 @@
     .results-row.c4,.results-row.c5,.results-row.c4.chev{grid-template-columns:repeat(2,1fr);column-gap:10px;}
     .results-row .pair-arrow{display:none;}
     .results-row .row-upper{display:none;}
+    .cap-top .cap:not(.cap-first){display:block;} .cap-top .cap.cap-first:not(.cap-last){display:none;}
+    .cap-top .cap{font-size:15px;margin:0 0 6px;}
     .results-row.c5>div:first-child{grid-column:1 / -1;width:calc(50% - 5px);margin:0 auto;}
     .results-row.c5.mv>div:first-child{grid-column:auto;width:auto;margin:0;}
     .results-row.c5.mv>div:last-child{grid-column:1 / -1;width:calc(50% - 5px);margin:0 auto;}
@@ -593,7 +599,8 @@
   ];
 
   // ROWS scenes are shown at once, one per row; captions sit under the last row only.
-  function gallery(prefix, GROUPS, COLS, ROWS, CHEV){
+  // CAP_TOP: captions above the videos, on the first row (desktop) / the one visible row (phones)
+  function gallery(prefix, GROUPS, COLS, ROWS, CHEV, CAP_TOP){
     ROWS = ROWS || 1;
     let g = 0, i = 0, token = 0;   // i = page index
     const tabs = document.getElementById(prefix + '-tabs');
@@ -601,13 +608,15 @@
     const row  = document.getElementById(prefix + '-row');
     const rows = [];
     if (CHEV) row.classList.add('chev');
+    if (CAP_TOP) row.classList.add('cap-top');
     const colsOf = () => GROUPS[g].cols || COLS;   // a group may bring its own columns (same count)
     for (let r = 0; r < ROWS; r++) {
       const caps = [];
       const vids = COLS.map((c, ci) => {
         if (CHEV && ci > 0) {   // chevron between neighbouring steps
           const ch = document.createElement('div');
-          ch.className = 'pair-arrow step-chev' + (r === ROWS - 1 ? ' capped' : ' flat row-upper'); ch.setAttribute('aria-hidden', 'true');
+          const capRow = CAP_TOP ? r === 0 : r === ROWS - 1;   // the row whose videos carry a caption
+          ch.className = 'pair-arrow step-chev' + (capRow ? (CAP_TOP ? ' capped-top' : ' capped') : ' flat') + (r < ROWS - 1 ? ' row-upper' : ''); ch.setAttribute('aria-hidden', 'true');
           ch.innerHTML = '<svg viewBox="0 0 12 24"><path d="M3 5l6 7-6 7"/></svg>';   // drawn, so it centres exactly (a text glyph sits low)
           row.appendChild(ch);
         }
@@ -615,9 +624,14 @@
         const v = document.createElement('video');
         v.className = 'vid'; v.muted = true; v.playsInline = true; v.preload = 'auto';
         v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+        if (CAP_TOP) {
+          // every row gets a caption above it; CSS shows the first row's on desktop and the last row's on phones
+          const cap = document.createElement('div'); cap.className = 'cap ' + (r === 0 ? 'cap-first' : '') + (r === ROWS - 1 ? ' cap-last' : '');
+          w.appendChild(cap); caps.push(cap);
+        }
         w.appendChild(v);
-        if (r === ROWS - 1) { const cap = document.createElement('div'); cap.className = 'cap'; w.appendChild(cap); caps.push(cap); }
-        else w.className = 'row-upper';   // hidden on phones, where one scene is shown at a time
+        if (!CAP_TOP && r === ROWS - 1) { const cap = document.createElement('div'); cap.className = 'cap'; w.appendChild(cap); caps.push(cap); }
+        if (r < ROWS - 1) w.className = 'row-upper';   // hidden on phones, where one scene is shown at a time
         row.appendChild(w);
         return v;
       });
@@ -688,7 +702,7 @@
     document.getElementById(prefix + '-next').onclick = () => { const n = nPages(); i = (i + 1) % n; render(); };
     whenNear(row, render);
   }
-  gallery('seg', SEG_GROUPS, SEG_COLS, 2, true);
+  gallery('seg', SEG_GROUPS, SEG_COLS, 2, true, true);
   gallery('nvs', NVS_GROUPS, NVS_COLS);
 })();
 </script>
