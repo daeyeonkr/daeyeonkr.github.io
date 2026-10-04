@@ -83,7 +83,17 @@
   .ours-vid{box-shadow:0 0 0 5px #ed748a;}
   .input-vid{box-shadow:0 0 0 5px #72bde5;}
   .cap{font-size:clamp(18px,1.65vw,28px);line-height:1.25;color:var(--body-muted);margin-top:12px;text-align:center;text-wrap:balance;}
-  .hero{margin-top:64px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"prev pairs next" ". dots .";column-gap:20px;align-items:center;}
+  /* soft sky-blue (input side) / pink (rendering side) glow behind the teaser only; fades out above and below,
+     so no colour reaches the title or the TL;DR text */
+  .hero::before{content:"";position:absolute;left:-6%;right:-6%;top:-56px;bottom:-56px;z-index:-1;pointer-events:none;
+    background:radial-gradient(40% 55% at 24% 50%,rgba(114,189,229,.55),transparent 72%),
+               radial-gradient(40% 55% at 76% 50%,rgba(255,152,167,.55),transparent 72%);
+    filter:blur(48px);
+    -webkit-mask-image:linear-gradient(to bottom,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(to bottom,transparent,#000 22%,#000 78%,transparent);
+    animation:hero-glow 18s ease-in-out infinite alternate;}
+  @keyframes hero-glow{from{transform:translateX(-3%) scale(1);}to{transform:translateX(3%) scale(1.06);}}
+  @media (prefers-reduced-motion:reduce){.hero::before{animation:none;}}
+  .hero{position:relative;isolation:isolate;margin-top:64px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"prev pairs next" ". dots .";column-gap:20px;align-items:center;}
   .hero .pairs{grid-area:pairs;min-width:0;}
   .pairs>*,.pair>*,.results-row>*,.cmp-row>*{min-width:0;} .hero-prev{grid-area:prev;} .hero-next{grid-area:next;} .hero-nav{grid-area:dots;}
   /* centre the side buttons on the two video rows, not on the block including the caption line below them */
@@ -197,6 +207,7 @@
     .subtitle{font-size:23px;margin-top:12px;}
     .tldr{margin-top:44px;} .tldr p{font-size:19px;}
     .stats{gap:40px;margin-top:36px;} .stat-num{font-size:40px;} .stat-label{font-size:14px;margin-top:4px;}
+    .hero::before{left:-16px;right:-16px;top:-32px;bottom:-32px;filter:blur(28px);}
     .hero{margin-top:44px;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"pairs pairs pairs" "prev dots next";column-gap:12px;row-gap:16px;}
     .hero .nav-btn{width:40px;height:40px;margin-top:0;}
     .hero-nav{margin-top:0;gap:6px;}
