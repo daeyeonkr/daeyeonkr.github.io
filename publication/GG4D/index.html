@@ -50,7 +50,7 @@
   @keyframes gg-flow{from{background-position:0% 0;}to{background-position:200% 0;}}
   @media (prefers-reduced-motion:reduce){.wordmark,.wordmark::before,.subtitle,.gg,.gg::before,.stat-num,.stat-num::before{animation:none;}}
   /* subtitle shares the title's flowing gradient (single layer: the text wraps on phones, so no overlay copy) */
-  .subtitle{display:block;width:fit-content;margin:16px auto 0;font-family:var(--ui);font-size:24px;font-weight:500;line-height:1.3;
+  .subtitle{display:block;width:fit-content;margin:16px auto 0;font-family:var(--ui);font-size:27px;font-weight:500;line-height:1.3;
             background:linear-gradient(to right,#6e91d3,#ed748a,#6e91d3);background-size:200% 100%;animation:gg-flow 7s linear infinite;
             -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
   .nw{white-space:nowrap;} .m-br{display:none;}
@@ -194,7 +194,7 @@
   @media (max-width:768px){
     .page{padding:56px 16px 56px;}
     .wordmark{font-size:96px;letter-spacing:-1.92px;}
-    .subtitle{font-size:19px;margin-top:12px;}
+    .subtitle{font-size:21px;margin-top:12px;}
     .tldr{margin-top:44px;} .tldr p{font-size:19px;}
     .stats{gap:40px;margin-top:36px;} .stat-num{font-size:40px;} .stat-label{font-size:14px;margin-top:4px;}
     .hero{margin-top:44px;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"pairs pairs pairs" "prev dots next";column-gap:12px;row-gap:16px;}
@@ -229,7 +229,7 @@
     .bibtex{font-size:12px;padding:44px 16px 16px;}
   }
   @media (max-width:500px){.m-br{display:inline;}}
-  @media (max-width:425px){.wordmark{font-size:82px;}.subtitle{font-size:17px;}}
+  @media (max-width:425px){.wordmark{font-size:82px;}.subtitle{font-size:19px;}}
 </style>
 </head>
 <body>
