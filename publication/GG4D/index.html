@@ -85,15 +85,15 @@
   .pairs>*,.pair>*,.results-row>*,.cmp-row>*{min-width:0;} .hero-prev{grid-area:prev;} .hero-next{grid-area:next;} .hero-nav{grid-area:dots;}
   /* centre the side buttons on the two video rows, not on the block including the caption line below them */
   /* centre the side buttons on the two video rows: the caption line now sits above the top row */
-  .hero .nav-btn{width:48px;height:48px;margin-top:calc(clamp(18px,1.65vw,28px) * 1.25 + 12px);}
+  .hero .nav-btn{width:48px;height:48px;margin-top:calc(clamp(16px,1.35vw,23px) * 1.25 + 12px);}
   .pairs{display:grid;grid-template-columns:repeat(2,1fr);gap:24px 48px;transition:opacity .3s ease;}
   .pairs.is-switching{opacity:0;}
   .pair{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;}
   .pair-arrow{align-self:center;font-size:40px;line-height:1;font-weight:300;color:#ed748a;}
   /* hero captions sit above the videos, on the top row only */
-  .pair .cap{white-space:nowrap;margin:0 0 12px;display:none;}
+  .pair .cap{white-space:nowrap;margin:0 0 12px;display:none;font-size:clamp(16px,1.35vw,23px);}
   .pair.cap-d .cap{display:block;}
-  .pair.cap-d .pair-arrow{padding-top:calc(clamp(18px,1.65vw,28px) * 1.25 + 12px);}
+  .pair.cap-d .pair-arrow{padding-top:calc(clamp(16px,1.35vw,23px) * 1.25 + 12px);}
   .hero-nav{display:none;}   /* set indicator under the teaser hidden; the side arrows page through */
   .hero-nav button{border:none;padding:0;cursor:pointer;width:28px;flex:0 1 28px;min-width:8px;height:6px;border-radius:9999px;background:var(--hairline);}
   .hero-nav button[aria-current="true"]{background:#ed748a;}
