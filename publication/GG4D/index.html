@@ -85,14 +85,15 @@
   .cap{font-size:clamp(18px,1.65vw,28px);line-height:1.25;color:var(--body-muted);margin-top:12px;text-align:center;text-wrap:balance;}
   /* soft sky-blue (input side) / pink (rendering side) glow behind the teaser only; fades out above and below,
      so no colour reaches the title or the TL;DR text */
-  .hero::before{content:"";position:absolute;left:-6%;right:-6%;top:-56px;bottom:-56px;z-index:-1;pointer-events:none;
-    background:radial-gradient(40% 55% at 24% 50%,rgba(114,189,229,.55),transparent 72%),
-               radial-gradient(40% 55% at 76% 50%,rgba(255,152,167,.55),transparent 72%);
-    filter:blur(48px);
-    -webkit-mask-image:linear-gradient(to bottom,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(to bottom,transparent,#000 22%,#000 78%,transparent);
-    animation:hero-glow 18s ease-in-out infinite alternate;}
-  @keyframes hero-glow{from{transform:translateX(-3%) scale(1);}to{transform:translateX(3%) scale(1.06);}}
-  @media (prefers-reduced-motion:reduce){.hero::before{animation:none;}}
+  .hero::before,.hero::after{content:"";position:absolute;top:-56px;bottom:-56px;width:62%;z-index:-1;pointer-events:none;
+    filter:blur(46px);will-change:transform;
+    -webkit-mask-image:linear-gradient(to bottom,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(to bottom,transparent,#000 22%,#000 78%,transparent);}
+  /* two glows drifting on their own paths at different speeds, so they keep sliding past and mixing */
+  .hero::before{left:-8%;background:radial-gradient(50% 50% at 50% 50%,rgba(114,189,229,.6),transparent 70%);animation:glow-a 7s ease-in-out infinite alternate;}
+  .hero::after{right:-8%;background:radial-gradient(50% 50% at 50% 50%,rgba(255,152,167,.6),transparent 70%);animation:glow-b 9s ease-in-out infinite alternate;}
+  @keyframes glow-a{0%{transform:translate(0,-8%) scale(1);}50%{transform:translate(28%,6%) scale(1.15);}100%{transform:translate(52%,-4%) scale(.95);}}
+  @keyframes glow-b{0%{transform:translate(0,6%) scale(1.1);}50%{transform:translate(-30%,-8%) scale(.92);}100%{transform:translate(-54%,4%) scale(1.12);}}
+  @media (prefers-reduced-motion:reduce){.hero::before,.hero::after{animation:none;}}
   .hero{position:relative;isolation:isolate;margin-top:64px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"prev pairs next" ". dots .";column-gap:20px;align-items:center;}
   .hero .pairs{grid-area:pairs;min-width:0;}
   .pairs>*,.pair>*,.results-row>*,.cmp-row>*{min-width:0;} .hero-prev{grid-area:prev;} .hero-next{grid-area:next;} .hero-nav{grid-area:dots;}
@@ -207,7 +208,7 @@
     .subtitle{font-size:23px;margin-top:12px;}
     .tldr{margin-top:44px;} .tldr p{font-size:19px;}
     .stats{gap:40px;margin-top:36px;} .stat-num{font-size:40px;} .stat-label{font-size:14px;margin-top:4px;}
-    .hero::before{left:-16px;right:-16px;top:-32px;bottom:-32px;filter:blur(28px);}
+    .hero::before,.hero::after{top:-32px;bottom:-32px;filter:blur(28px);}
     .hero{margin-top:44px;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"pairs pairs pairs" "prev dots next";column-gap:12px;row-gap:16px;}
     .hero .nav-btn{width:40px;height:40px;margin-top:0;}
     .hero-nav{margin-top:0;gap:6px;}
