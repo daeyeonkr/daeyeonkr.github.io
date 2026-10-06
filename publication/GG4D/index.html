@@ -400,6 +400,18 @@
     setTimeout(fire, 3000);
   }
 
+  // Warm the HTTP cache with the clips of the neighbouring pages, so paging plays at once.
+  // Runs a moment after the current page has started, at most once per URL.
+  const fetched = new Set();
+  function prefetch(urls){
+    urls.forEach(u => {
+      if (fetched.has(u)) return;
+      fetched.add(u);
+      fetch(u).then(r => r.ok ? r.blob() : Promise.reject()).catch(() => fetched.delete(u));
+    });
+  }
+  const PREFETCH_DELAY = 1500;
+
   // run fn once, when el comes within ~one screen of the viewport (sections below the hero load lazily)
   function whenNear(el, fn){
     if (!('IntersectionObserver' in window)) return fn();
@@ -481,10 +493,22 @@
       });
       btns.forEach((b, j) => { if (j === k) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
     }
+    // neighbouring sets: attach their sources so the hidden elements fetch them in the background
+    let warmTimer = null;
+    function warm(k){
+      clearTimeout(warmTimer);
+      warmTimer = setTimeout(() => {
+        const n = nPages();
+        members((k + 1) % n).concat(members((k - 1 + n) % n)).forEach(j => pairs[j].vids.forEach(v => {
+          if (!v.getAttribute('src')) { v.preload = 'auto'; v.src = v.dataset.src; v.load(); }
+        }));
+      }, PREFETCH_DELAY);
+    }
     function show(k){
       if (k === page) return;
       const first = page < 0;
       page = k;
+      warm(k);
       if (first) return apply(k);
       box.classList.add('is-switching');
       setTimeout(() => { apply(k); box.classList.remove('is-switching'); }, 300);
@@ -561,6 +585,9 @@
         c.out.src = sc.out; c.pc.src = sc.pc;
         startTogether([c.out, c.pc], () => my === token, c.restart);
       });
+      const urls = k => Array.from({ length: pp }, (_, j) => SCENES[(k * pp + j) % SCENES.length]).flatMap(s => [s.out, s.pc]);
+      const n = nPages();
+      setTimeout(() => { if (my === token) prefetch(urls((page + 1) % n).concat(urls((page - 1 + n) % n))); }, PREFETCH_DELAY);
     }
     mq.addEventListener('change', e => {   // keep the first visible scene when the layout switches
       page = e.matches ? page * PER_PAGE : Math.floor(page / PER_PAGE); render();
@@ -709,6 +736,16 @@
         R.follow = R.vids.filter((_, k) => !cols[k].sync);
         startTogether(R.synced.concat(R.follow), () => my === token, R.restart);
       });
+      const urls = k => {
+        const out = [], cols = colsOf();
+        for (let r = skip; r < ROWS; r++) {
+          const sc = scenes[(k * rn + r - skip) % scenes.length];
+          cols.forEach(c => out.push(GROUPS[g].dir + sc.id + '/' + c.file));
+        }
+        return out;
+      };
+      const n = nPages();
+      setTimeout(() => { if (my === token) prefetch(urls((i + 1) % n).concat(urls((i - 1 + n) % n))); }, PREFETCH_DELAY);
     }
     if (ROWS > 1) mq.addEventListener('change', e => {   // keep the first visible scene when the layout switches
       i = e.matches ? i * ROWS : Math.floor(i / ROWS); render();
