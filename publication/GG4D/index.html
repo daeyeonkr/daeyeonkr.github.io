@@ -183,6 +183,8 @@
   .f{background:#ffb5c2;} .s{background:#b0dff4;}
   .tbl-note{font-size:14px;color:var(--body-muted);margin-top:16px;}
   .tbl-note span{padding:2px 8px;border-radius:4px;}
+  .tbl-cap{margin:0 0 12px;}
+  .tbl-note + .tbl-cap{margin-top:56px;}
 
   .fig{width:100%;display:block;border-radius:8px;}
 
@@ -333,6 +335,7 @@
       <div class="label">Numbers</div>
       <h2 class="h2">Quantitative Comparison</h2>
     </div>
+      <div class="label tbl-cap">Dynamic Novel-View Synthesis</div>
       <div class="tbl-wrap">
       <table>
         <thead>
@@ -366,6 +369,31 @@
       </table>
       </div>
       <div class="tbl-note"><span class="f">best</span>&nbsp; <span class="s">second best</span>&nbsp; &ldquo;&ndash;&rdquo; denotes settings a method does not support.</div>
+
+      <div class="label tbl-cap">Dynamic Region Segmentation</div>
+      <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2">Method</th>
+            <th colspan="4" class="grp">DAVIS16-M</th>
+            <th colspan="4" class="grp">DAVIS17-M</th>
+            <th rowspan="2">Time (s)&darr;</th>
+          </tr>
+          <tr>
+            <th>J-Mean&uarr;</th><th>J-Recall&uarr;</th><th>F-Mean&uarr;</th><th>F-Recall&uarr;</th>
+            <th>J-Mean&uarr;</th><th>J-Recall&uarr;</th><th>F-Mean&uarr;</th><th>F-Recall&uarr;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>SegAnyMo</td><td>0.7556</td><td>0.7859</td><td class="f">0.8168</td><td class="s">0.8354</td><td>0.7541</td><td>0.7984</td><td class="s">0.7912</td><td class="s">0.8227</td><td>226</td></tr>
+          <tr><td>VGGT4D</td><td>0.5856</td><td>0.6048</td><td>0.4908</td><td>0.5218</td><td>0.5478</td><td>0.6165</td><td>0.4582</td><td>0.4937</td><td>95</td></tr>
+          <tr><td>GeoMotion</td><td class="s">0.7595</td><td class="s">0.8775</td><td>0.7046</td><td>0.8138</td><td class="s">0.7824</td><td class="s">0.8985</td><td>0.7159</td><td>0.8151</td><td class="s">16</td></tr>
+          <tr class="ours"><td>GG4D (Ours)</td><td class="f">0.8139</td><td class="f">0.9266</td><td class="s">0.7876</td><td class="f">0.9021</td><td class="f">0.8342</td><td class="f">0.9353</td><td class="f">0.8068</td><td class="f">0.9099</td><td class="f">3.4</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="tbl-note"><span class="f">best</span>&nbsp; <span class="s">second best</span></div>
   </section>
 
 </div>
